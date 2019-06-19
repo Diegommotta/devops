@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Repository:repository xmlns:Repository="http://www.tibco.com/xmlns/repo/types/2002">
+    <enterpriseArchive>
+        <sharedArchive name="Shared Archive">
+            <resourceType>shared.archive.resource</resourceType>
+            <authorProperty>Fabian Rincon Leon</authorProperty>
+        </sharedArchive>
+        <processArchive name="Process Archive">
+            <resourceType>process.archive.resource</resourceType>
+            <authorProperty>Aria PSW</authorProperty>
+            <processProperty>/Core.Service/DatosBasicosUsuario/Interface/jmsDatosBasicosUsuario.process,/Core.Service/ConsInfoUsuario/Interface/JMSConsultarInfoUsuario.process</processProperty>
+        </processArchive>
+        <versionProperty>4</versionProperty>
+        <authorProperty>Aria PSW</authorProperty>
+        <addServiceSettableGvars>true</addServiceSettableGvars>
+        <name>COMPENSAR.SI.InformacionUsuario_v1.0</name>
+        <designer>
+            <lockedProperties/>
+            <fixedChildren/>
+            <resourceDescriptions/>
+        </designer>
+        <fileLocationProperty>C:\Users\David Lozano\Documents\EARS\Junio 2019\COMPENSAR.SI.InformacionUsuario_v1.0.ear</fileLocationProperty>
+        <description>Servicio back JMS DatosBasicosUsuario, se consume a travez del servicio front RS.SecurityProxy. Realiza la ejecucion del procedimiento almacenado "PA_VIN_PORT_CLI1" de la BD "Comclientes".</description>
+    </enterpriseArchive>
+</Repository:repository>

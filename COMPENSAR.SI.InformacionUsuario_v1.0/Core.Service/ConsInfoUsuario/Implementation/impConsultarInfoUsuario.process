@@ -1,0 +1,1171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://www.compensar.com/services/commons/ServiceManager" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:pfx2="http://www.tibco.com/ns/no_namespace_schema_location/Core.ConsultaInfoUsuario/ConsInfoUsuario/Schema/ConsultaInfoUsuario.xsd" xmlns:ns="http://www.tibco.com/pe/DeployedVarsType" xmlns:pfx3="http://www.compensar.com/middleware/commons/InsertLog/v1.0" xmlns:pfx4="http://www.tibco.com/ns/no_namespace_schema_location/Core.Service/ConsInfoUsuario/Schema/ConsultaInfoUsuario.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/Core.ConsultaInfoUsuario/ConsInfoUsuario/Schema/ConsultaInfoUsuario.xsd" schemaLocation="/Core.ConsultaInfoUsuario/ConsInfoUsuario/Schema/ConsultaInfoUsuario.xsd"/>
+    <xsd:import namespace="http://www.compensar.com/services/commons/ServiceManager" schemaLocation="/Core.Service/ConsInfoUsuario/Schema/ServiceManager.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/Core.Service/ConsInfoUsuario/Schema/ConsultaInfoUsuario.xsd" schemaLocation="/Core.Service/ConsInfoUsuario/Schema/ConsultaInfoUsuario.xsd"/>
+    <pd:name>Core.Service/ConsInfoUsuario/Implementation/impConsultarInfoUsuario.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Parameters">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="RequestDateTime" type="xsd:dateTime"/>
+                    <xsd:element name="Logging">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="TrxID" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="ESBTrxID" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="ServiceName" type="xsd:string"/>
+                                <xsd:element name="OperationName" type="xsd:string"/>
+                                <xsd:element name="ApplicationID" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="OperationInvokerName" type="xsd:string" minOccurs="0"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element ref="pfx:ServiceRequest"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>29</pd:startX>
+    <pd:startY>55</pd:startY>
+    <pd:returnBindings>
+        <Return>
+            <xsl:copy-of select="$prvarResponse/pfx:ServiceResponse"/>
+        </Return>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="Return">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx:ServiceResponse"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>827</pd:endX>
+    <pd:endY>55</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <prvarResponse ref="pfx:ServiceResponse"/>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1560112235817</pd:targetNamespace>
+    <pd:activity name="MapRequest">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>140</pd:x>
+        <pd:y>55</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx4:ConsultarInfoUsuario_Rq"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <ConsultarInfoUsuario_Rq>
+                    <Identificacion>
+                        <TipoIdentificacion>
+                            <xsl:value-of select="$Start/Parameters/pfx:ServiceRequest/pfx:RequestBody/pfx:Parameters/pfx:Parameter[@Key=$_globalVariables/ns:GlobalVariables/ConsultarInfoUsuario/Request/TipoId]"/>
+                        </TipoIdentificacion>
+                        <NumeroIdentificacion>
+                            <xsl:value-of select="$Start/Parameters/pfx:ServiceRequest/pfx:RequestBody/pfx:Parameters/pfx:Parameter[@Key = $_globalVariables/ns:GlobalVariables/ConsultarInfoUsuario/Request/NumId]"/>
+                        </NumeroIdentificacion>
+                    </Identificacion>
+                    <Opcion>
+                        <xsl:value-of select="$_globalVariables/ns:GlobalVariables/ConsultarInfoUsuario/Request/Opcion"/>
+                    </Opcion>
+                </ConsultarInfoUsuario_Rq>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="impJdbcCallSP_Ecomerce_Cons_cli">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>289</pd:x>
+        <pd:y>55</pd:y>
+        <config>
+            <processName>/Core.Service/ConsInfoUsuario/Implementation/impJdbcCallSP_Ecomerce_Cons_cli.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Parameters>
+                <Logging>
+                    <xsl:if test="$Start/Parameters/Logging/TrxID">
+                        <TrxID>
+                            <xsl:value-of select="$Start/Parameters/Logging/TrxID"/>
+                        </TrxID>
+                    </xsl:if>
+                    <xsl:if test="$Start/Parameters/Logging/ESBTrxID">
+                        <ESBTrxID>
+                            <xsl:value-of select="$Start/Parameters/Logging/ESBTrxID"/>
+                        </ESBTrxID>
+                    </xsl:if>
+                    <ServiceName>
+                        <xsl:value-of select="$Start/Parameters/Logging/ServiceName"/>
+                    </ServiceName>
+                    <OperationName>
+                        <xsl:value-of select="$Start/Parameters/Logging/OperationName"/>
+                    </OperationName>
+                    <xsl:if test="$Start/Parameters/Logging/ApplicationID">
+                        <ApplicationID>
+                            <xsl:value-of select="$Start/Parameters/Logging/ApplicationID"/>
+                        </ApplicationID>
+                    </xsl:if>
+                    <xsl:if test="$Start/Parameters/Logging/OperationInvokerName">
+                        <OperationInvokerName>
+                            <xsl:value-of select="$Start/Parameters/Logging/OperationInvokerName"/>
+                        </OperationInvokerName>
+                    </xsl:if>
+                </Logging>
+                <ConsultarInfoUsuario_Rq>
+                    <Identificacion>
+                        <TipoIdentificacion>
+                            <xsl:value-of select="$MapRequest/root/ConsultarInfoUsuario_Rq/Identificacion/TipoIdentificacion"/>
+                        </TipoIdentificacion>
+                        <NumeroIdentificacion>
+                            <xsl:value-of select="$MapRequest/root/ConsultarInfoUsuario_Rq/Identificacion/NumeroIdentificacion"/>
+                        </NumeroIdentificacion>
+                    </Identificacion>
+                    <xsl:if test="$MapRequest/root/ConsultarInfoUsuario_Rq/Opcion">
+                        <Opcion>
+                            <xsl:value-of select="$MapRequest/root/ConsultarInfoUsuario_Rq/Opcion"/>
+                        </Opcion>
+                    </xsl:if>
+                </ConsultarInfoUsuario_Rq>
+            </Parameters>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="BuildResponse">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>587</pd:x>
+        <pd:y>55</pd:y>
+        <config>
+            <processName>/Core.Service/ConsInfoUsuario/Implementation/LogicBuildResponse.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Parameters>
+                <Logging>
+                    <xsl:if test="$Start/Parameters/Logging/TrxID">
+                        <TrxID>
+                            <xsl:value-of select="$Start/Parameters/Logging/TrxID"/>
+                        </TrxID>
+                    </xsl:if>
+                    <xsl:if test="$Start/Parameters/Logging/ESBTrxID">
+                        <ESBTrxID>
+                            <xsl:value-of select="$Start/Parameters/Logging/ESBTrxID"/>
+                        </ESBTrxID>
+                    </xsl:if>
+                    <ServiceName>
+                        <xsl:value-of select="$Start/Parameters/Logging/ServiceName"/>
+                    </ServiceName>
+                    <OperationName>
+                        <xsl:value-of select="$Start/Parameters/Logging/OperationName"/>
+                    </OperationName>
+                    <xsl:if test="$Start/Parameters/Logging/ApplicationID">
+                        <ApplicationID>
+                            <xsl:value-of select="$Start/Parameters/Logging/ApplicationID"/>
+                        </ApplicationID>
+                    </xsl:if>
+                    <xsl:if test="$Start/Parameters/Logging/OperationInvokerName">
+                        <OperationInvokerName>
+                            <xsl:value-of select="$Start/Parameters/Logging/OperationInvokerName"/>
+                        </OperationInvokerName>
+                    </xsl:if>
+                </Logging>
+                <ConsultarInfoUsuario_Rs>
+                    <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario">
+                        <Usuario>
+                            <Identificacion>
+                                <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Identificacion/Id">
+                                    <Id>
+                                        <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Identificacion/Id"/>
+                                    </Id>
+                                </xsl:if>
+                                <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Identificacion/Tipo">
+                                    <Tipo>
+                                        <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Identificacion/Tipo"/>
+                                    </Tipo>
+                                </xsl:if>
+                                <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Identificacion/Numero">
+                                    <Numero>
+                                        <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Identificacion/Numero"/>
+                                    </Numero>
+                                </xsl:if>
+                            </Identificacion>
+                            <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/PrimerApellido">
+                                <PrimerApellido>
+                                    <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/PrimerApellido"/>
+                                </PrimerApellido>
+                            </xsl:if>
+                            <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/SegundoApellido">
+                                <SegundoApellido>
+                                    <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/SegundoApellido"/>
+                                </SegundoApellido>
+                            </xsl:if>
+                            <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/PrimerNombre">
+                                <PrimerNombre>
+                                    <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/PrimerNombre"/>
+                                </PrimerNombre>
+                            </xsl:if>
+                            <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/SegundoNombre">
+                                <SegundoNombre>
+                                    <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/SegundoNombre"/>
+                                </SegundoNombre>
+                            </xsl:if>
+                            <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/FechaNacimiento">
+                                <FechaNacimiento>
+                                    <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/FechaNacimiento"/>
+                                </FechaNacimiento>
+                            </xsl:if>
+                            <Genero>
+                                <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Genero/Id">
+                                    <Id>
+                                        <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Genero/Id"/>
+                                    </Id>
+                                </xsl:if>
+                                <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Genero/Valor">
+                                    <Valor>
+                                        <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Genero/Valor"/>
+                                    </Valor>
+                                </xsl:if>
+                            </Genero>
+                            <EstadoCivil>
+                                <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/EstadoCivil/Id">
+                                    <Id>
+                                        <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/EstadoCivil/Id"/>
+                                    </Id>
+                                </xsl:if>
+                                <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/EstadoCivil/Valor">
+                                    <Valor>
+                                        <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/EstadoCivil/Valor"/>
+                                    </Valor>
+                                </xsl:if>
+                            </EstadoCivil>
+                            <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Marcacion">
+                                <Marcacion>
+                                    <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Marcacion"/>
+                                </Marcacion>
+                            </xsl:if>
+                            <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/OptinCORELE">
+                                <OptinCORELE>
+                                    <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/OptinCORELE"/>
+                                </OptinCORELE>
+                            </xsl:if>
+                            <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/OptinTELCEL">
+                                <OptinTELCEL>
+                                    <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/OptinTELCEL"/>
+                                </OptinTELCEL>
+                            </xsl:if>
+                            <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/CorreoElectronico">
+                                <CorreoElectronico>
+                                    <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/CorreoElectronico"/>
+                                </CorreoElectronico>
+                            </xsl:if>
+                            <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/TelefonoMovil">
+                                <TelefonoMovil>
+                                    <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/TelefonoMovil"/>
+                                </TelefonoMovil>
+                            </xsl:if>
+                            <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/TelefonoFijo">
+                                <TelefonoFijo>
+                                    <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/TelefonoFijo"/>
+                                </TelefonoFijo>
+                            </xsl:if>
+                            <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Direccion">
+                                <Direccion>
+                                    <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Direccion"/>
+                                </Direccion>
+                            </xsl:if>
+                            <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/DirGeorreferenciada">
+                                <DirGeorreferenciada>
+                                    <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/DirGeorreferenciada"/>
+                                </DirGeorreferenciada>
+                            </xsl:if>
+                            <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Ciudad">
+                                <Ciudad>
+                                    <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Ciudad"/>
+                                </Ciudad>
+                            </xsl:if>
+                            <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Departamento">
+                                <Departamento>
+                                    <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Departamento"/>
+                                </Departamento>
+                            </xsl:if>
+                            <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Categoria">
+                                <Categoria>
+                                    <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Categoria"/>
+                                </Categoria>
+                            </xsl:if>
+                            <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Nautcli">
+                                <Nautcli>
+                                    <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Nautcli"/>
+                                </Nautcli>
+                            </xsl:if>
+                            <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Discapacidad">
+                                <Discapacidad>
+                                    <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Discapacidad"/>
+                                </Discapacidad>
+                            </xsl:if>
+                            <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Edad">
+                                <Edad>
+                                    <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Edad"/>
+                                </Edad>
+                            </xsl:if>
+                            <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones">
+                                <Vinculaciones>
+                                    <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones/NAUTCLI">
+                                        <NAUTCLI>
+                                            <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones/NAUTCLI"/>
+                                        </NAUTCLI>
+                                    </xsl:if>
+                                    <EstadoVinculacion>
+                                        <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones/EstadoVinculacion/Id">
+                                            <Id>
+                                                <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones/EstadoVinculacion/Id"/>
+                                            </Id>
+                                        </xsl:if>
+                                        <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones/EstadoVinculacion/Valor">
+                                            <Valor>
+                                                <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones/EstadoVinculacion/Valor"/>
+                                            </Valor>
+                                        </xsl:if>
+                                    </EstadoVinculacion>
+                                    <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones/CodigoVinculacion">
+                                        <CodigoVinculacion>
+                                            <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones/CodigoVinculacion"/>
+                                        </CodigoVinculacion>
+                                    </xsl:if>
+                                    <IdentificiacionEmpresa>
+                                        <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones/IdentificiacionEmpresa/Id">
+                                            <Id>
+                                                <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones/IdentificiacionEmpresa/Id"/>
+                                            </Id>
+                                        </xsl:if>
+                                        <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones/IdentificiacionEmpresa/Valor">
+                                            <Valor>
+                                                <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones/IdentificiacionEmpresa/Valor"/>
+                                            </Valor>
+                                        </xsl:if>
+                                        <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones/IdentificiacionEmpresa/Numero">
+                                            <Numero>
+                                                <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones/IdentificiacionEmpresa/Numero"/>
+                                            </Numero>
+                                        </xsl:if>
+                                    </IdentificiacionEmpresa>
+                                    <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones/Cargo">
+                                        <Cargo>
+                                            <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones/Cargo"/>
+                                        </Cargo>
+                                    </xsl:if>
+                                    <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones/EmpleadoServicioDomestico">
+                                        <EmpleadoServicioDomestico>
+                                            <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones/EmpleadoServicioDomestico"/>
+                                        </EmpleadoServicioDomestico>
+                                    </xsl:if>
+                                </Vinculaciones>
+                            </xsl:if>
+                            <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario">
+                                <Beneficiario>
+                                    <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/NAUTCLITrabajador">
+                                        <NAUTCLITrabajador>
+                                            <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/NAUTCLITrabajador"/>
+                                        </NAUTCLITrabajador>
+                                    </xsl:if>
+                                    <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/NAUTCLIBeneficiario">
+                                        <NAUTCLIBeneficiario>
+                                            <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/NAUTCLIBeneficiario"/>
+                                        </NAUTCLIBeneficiario>
+                                    </xsl:if>
+                                    <Identificacion>
+                                        <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Identificacion/Id">
+                                            <Id>
+                                                <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Identificacion/Id"/>
+                                            </Id>
+                                        </xsl:if>
+                                        <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Identificacion/Tipo">
+                                            <Tipo>
+                                                <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Identificacion/Tipo"/>
+                                            </Tipo>
+                                        </xsl:if>
+                                        <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Identificacion/Numero">
+                                            <Numero>
+                                                <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Identificacion/Numero"/>
+                                            </Numero>
+                                        </xsl:if>
+                                    </Identificacion>
+                                    <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/PrimerApellido">
+                                        <PrimerApellido>
+                                            <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/PrimerApellido"/>
+                                        </PrimerApellido>
+                                    </xsl:if>
+                                    <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/SegundoApellido">
+                                        <SegundoApellido>
+                                            <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/SegundoApellido"/>
+                                        </SegundoApellido>
+                                    </xsl:if>
+                                    <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/PrimerNombre">
+                                        <PrimerNombre>
+                                            <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/PrimerNombre"/>
+                                        </PrimerNombre>
+                                    </xsl:if>
+                                    <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/SegundoNombre">
+                                        <SegundoNombre>
+                                            <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/SegundoNombre"/>
+                                        </SegundoNombre>
+                                    </xsl:if>
+                                    <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/FechaNacimiento">
+                                        <FechaNacimiento>
+                                            <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/FechaNacimiento"/>
+                                        </FechaNacimiento>
+                                    </xsl:if>
+                                    <Genero>
+                                        <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Genero/Id">
+                                            <Id>
+                                                <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Genero/Id"/>
+                                            </Id>
+                                        </xsl:if>
+                                        <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Genero/Valor">
+                                            <Valor>
+                                                <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Genero/Valor"/>
+                                            </Valor>
+                                        </xsl:if>
+                                    </Genero>
+                                    <EstadoCivil>
+                                        <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/EstadoCivil/Id">
+                                            <Id>
+                                                <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/EstadoCivil/Id"/>
+                                            </Id>
+                                        </xsl:if>
+                                        <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/EstadoCivil/Valor">
+                                            <Valor>
+                                                <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/EstadoCivil/Valor"/>
+                                            </Valor>
+                                        </xsl:if>
+                                    </EstadoCivil>
+                                    <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Marcacion">
+                                        <Marcacion>
+                                            <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Marcacion"/>
+                                        </Marcacion>
+                                    </xsl:if>
+                                    <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/OptionCORELE">
+                                        <OptionCORELE>
+                                            <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/OptionCORELE"/>
+                                        </OptionCORELE>
+                                    </xsl:if>
+                                    <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/OptinTELCEL">
+                                        <OptinTELCEL>
+                                            <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/OptinTELCEL"/>
+                                        </OptinTELCEL>
+                                    </xsl:if>
+                                    <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/CorreoElectronico">
+                                        <CorreoElectronico>
+                                            <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/CorreoElectronico"/>
+                                        </CorreoElectronico>
+                                    </xsl:if>
+                                    <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/TelefonoMovil">
+                                        <TelefonoMovil>
+                                            <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/TelefonoMovil"/>
+                                        </TelefonoMovil>
+                                    </xsl:if>
+                                    <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/TelefonoFijo">
+                                        <TelefonoFijo>
+                                            <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/TelefonoFijo"/>
+                                        </TelefonoFijo>
+                                    </xsl:if>
+                                    <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Direccion">
+                                        <Direccion>
+                                            <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Direccion"/>
+                                        </Direccion>
+                                    </xsl:if>
+                                    <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/DirGeorreferencia">
+                                        <DirGeorreferencia>
+                                            <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/DirGeorreferencia"/>
+                                        </DirGeorreferencia>
+                                    </xsl:if>
+                                    <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Ciudad">
+                                        <Ciudad>
+                                            <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Ciudad"/>
+                                        </Ciudad>
+                                    </xsl:if>
+                                    <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Departamento">
+                                        <Departamento>
+                                            <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Departamento"/>
+                                        </Departamento>
+                                    </xsl:if>
+                                    <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Categoria">
+                                        <Categoria>
+                                            <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Categoria"/>
+                                        </Categoria>
+                                    </xsl:if>
+                                    <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Edad">
+                                        <Edad>
+                                            <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Edad"/>
+                                        </Edad>
+                                    </xsl:if>
+                                    <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Discapacidad">
+                                        <Discapacidad>
+                                            <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Discapacidad"/>
+                                        </Discapacidad>
+                                    </xsl:if>
+                                    <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/CodigoVinculacion">
+                                        <CodigoVinculacion>
+                                            <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/CodigoVinculacion"/>
+                                        </CodigoVinculacion>
+                                    </xsl:if>
+                                    <Parentesco>
+                                        <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Parentesco/Id">
+                                            <Id>
+                                                <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Parentesco/Id"/>
+                                            </Id>
+                                        </xsl:if>
+                                        <xsl:if test="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Parentesco/Valor">
+                                            <Valor>
+                                                <xsl:value-of select="$Homologaciones/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Parentesco/Valor"/>
+                                            </Valor>
+                                        </xsl:if>
+                                    </Parentesco>
+                                </Beneficiario>
+                            </xsl:if>
+                        </Usuario>
+                    </xsl:if>
+                </ConsultarInfoUsuario_Rs>
+            </Parameters>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assign Succes">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>707</pd:x>
+        <pd:y>55</pd:y>
+        <config>
+            <variableName>prvarResponse</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx:ServiceResponse>
+                <pfx:ResponseHeader>
+                    <pfx:RequestDate>
+                        <xsl:value-of select="$Start/Parameters/RequestDateTime"/>
+                    </pfx:RequestDate>
+                    <pfx:ResponseDate>
+                        <xsl:value-of select="current-dateTime()"/>
+                    </pfx:ResponseDate>
+                    <xsl:choose>
+                        <xsl:when test="exists($impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario)">
+                            <pfx:ResponseCode>
+                                <xsl:value-of select="$_globalVariables/ns:GlobalVariables/ConsultarInfoUsuario/Response/SuccesResponse/Code"/>
+                            </pfx:ResponseCode>
+                            <pfx:ResponseDesc>
+                                <xsl:value-of select="$_globalVariables/ns:GlobalVariables/ConsultarInfoUsuario/Response/SuccesResponse/Desc"/>
+                            </pfx:ResponseDesc>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <pfx:ResponseCode>
+                                <xsl:value-of select="$_globalVariables/ns:GlobalVariables/ConsultarInfoUsuario/Response/NoExistingUser/ErrCode"/>
+                            </pfx:ResponseCode>
+                            <pfx:ResponseDesc>
+                                <xsl:value-of select="$_globalVariables/ns:GlobalVariables/ConsultarInfoUsuario/Response/NoExistingUser/ErrDesc"/>
+                            </pfx:ResponseDesc>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    <pfx:TransactionID>
+                        <xsl:value-of select="$Start/Parameters/pfx:ServiceRequest/pfx:RequestHeader/pfx:System/pfx:TransactionID"/>
+                    </pfx:TransactionID>
+                </pfx:ResponseHeader>
+                <pfx:ResponseBody>
+                    <pfx:JSONMessage>
+                        <xsl:value-of select="$BuildResponse/Return/jsonString"/>
+                    </pfx:JSONMessage>
+                </pfx:ResponseBody>
+            </pfx:ServiceResponse>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="InsertLog">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>142</pd:x>
+        <pd:y>205</pd:y>
+        <config>
+            <processName>/Logging/Services/InsertLog.process</processName>
+        </config>
+        <pd:inputBindings>
+            <pfx3:Logs>
+                <xsl:if test="$Start/Parameters/Logging/TrxID">
+                    <pfx3:TrxID>
+                        <xsl:value-of select="$Start/Parameters/Logging/TrxID"/>
+                    </pfx3:TrxID>
+                </xsl:if>
+                <xsl:if test="$Start/Parameters/Logging/ESBTrxID">
+                    <pfx3:ESBTransactionIdentifier>
+                        <xsl:value-of select="$Start/Parameters/Logging/ESBTrxID"/>
+                    </pfx3:ESBTransactionIdentifier>
+                </xsl:if>
+                <pfx3:ServiceName>
+                    <xsl:value-of select="$Start/Parameters/Logging/ServiceName"/>
+                </pfx3:ServiceName>
+                <pfx3:OperationName>
+                    <xsl:value-of select="$Start/Parameters/Logging/OperationName"/>
+                </pfx3:OperationName>
+                <xsl:if test="$Start/Parameters/Logging/ApplicationID">
+                    <pfx3:AplicationID>
+                        <xsl:value-of select="$Start/Parameters/Logging/ApplicationID"/>
+                    </pfx3:AplicationID>
+                </xsl:if>
+                <pfx3:TimeStp>
+                    <xsl:value-of select="current-dateTime()"/>
+                </pfx3:TimeStp>
+                <pfx3:Desc>
+                    <xsl:value-of select="'ERROR Parametros invalidos'"/>
+                </pfx3:Desc>
+                <pfx3:LogLevel>
+                    <xsl:value-of select="$_globalVariables/ns:GlobalVariables/Logging/LogLevel/LogLevel"/>
+                </pfx3:LogLevel>
+                <xsl:if test="$Start/Parameters/Logging/OperationInvokerName">
+                    <pfx3:OperationInvokerName>
+                        <xsl:value-of select="$Start/Parameters/Logging/OperationInvokerName"/>
+                    </pfx3:OperationInvokerName>
+                </xsl:if>
+                <pfx3:ErrorID>
+                    <xsl:value-of select="$_globalVariables/ns:GlobalVariables/ConsultarInfoUsuario/Response/UnExpectedError/ErrCode"/>
+                </pfx3:ErrorID>
+                <xsl:variable name="varTipoId" select="$Start/Parameters/pfx:ServiceRequest/pfx:RequestBody/pfx:Parameters/pfx:Parameter[@Key=$_globalVariables/ns:GlobalVariables/ConsultarInfoUsuario/Request/TipoId]"/>
+                <xsl:variable name="varNumId" select="$Start/Parameters/pfx:ServiceRequest/pfx:RequestBody/pfx:Parameters/pfx:Parameter[@Key = $_globalVariables/ns:GlobalVariables/ConsultarInfoUsuario/Request/NumId]"/>
+                <xsl:choose>
+                    <xsl:when test="string-length($varTipoId)>0 and string-length($varNumId)=0">
+                        <pfx3:ErrorDesc>
+                            <xsl:value-of select="concat('Nombre parametros invalidos [',$_globalVariables/ns:GlobalVariables/ConsultarInfoUsuario/Request/NumId,' ,]')"/>
+                        </pfx3:ErrorDesc>
+                    </xsl:when>
+                    <xsl:when test="string-length($varTipoId)=0 and string-length($varNumId)>0">
+                        <pfx3:ErrorDesc>
+                            <xsl:value-of select="concat('Nombre de parametros invalidos [', $_globalVariables/ns:GlobalVariables/ConsultarInfoUsuario/Request/TipoId,  ',]')"/>
+                        </pfx3:ErrorDesc>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <pfx3:ErrorDesc>
+                            <xsl:value-of select="concat('Nombre de parametros invalidos [', $_globalVariables/ns:GlobalVariables/ConsultarInfoUsuario/Request/TipoId, ' - ', $_globalVariables/ns:GlobalVariables/ConsultarInfoUsuario/Request/NumId, ',]')"/>
+                        </pfx3:ErrorDesc>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </pfx3:Logs>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assign Error">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>710</pd:x>
+        <pd:y>205</pd:y>
+        <config>
+            <variableName>prvarResponse</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx:ServiceResponse>
+                <pfx:ResponseHeader>
+                    <pfx:RequestDate>
+                        <xsl:value-of select="$Start/Parameters/RequestDateTime"/>
+                    </pfx:RequestDate>
+                    <pfx:ResponseDate>
+                        <xsl:value-of select="current-dateTime()"/>
+                    </pfx:ResponseDate>
+                    <pfx:ResponseCode>
+                        <xsl:value-of select="$_globalVariables/ns:GlobalVariables/ConsultarInfoUsuario/Response/UnExpectedError/ErrCode"/>
+                    </pfx:ResponseCode>
+                    <pfx:ResponseDesc>
+                        <xsl:value-of select="$_globalVariables/ns:GlobalVariables/ConsultarInfoUsuario/Response/UnExpectedError/ErrDesc"/>
+                    </pfx:ResponseDesc>
+                    <pfx:TransactionID>
+                        <xsl:value-of select="$Start/Parameters/pfx:ServiceRequest/pfx:RequestHeader/pfx:System/pfx:IPAddress"/>
+                    </pfx:TransactionID>
+                </pfx:ResponseHeader>
+                <pfx:ResponseBody/>
+            </pfx:ServiceResponse>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Homologaciones">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>442</pd:x>
+        <pd:y>55</pd:y>
+        <config>
+            <processName>/Core.Service/ConsInfoUsuario/Implementation/Homologaciones.process</processName>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <logging>
+                    <TrxID>
+                        <xsl:value-of select="$Start/Parameters/Logging/TrxID"/>
+                    </TrxID>
+                </logging>
+                <ConsultarInfoUsuario_Rs>
+                    <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario">
+                        <Usuario>
+                            <Identificacion>
+                                <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Identificacion/Id">
+                                    <Id>
+                                        <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Identificacion/Id"/>
+                                    </Id>
+                                </xsl:if>
+                                <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Identificacion/Tipo">
+                                    <Tipo>
+                                        <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Identificacion/Tipo"/>
+                                    </Tipo>
+                                </xsl:if>
+                                <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Identificacion/Numero">
+                                    <Numero>
+                                        <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Identificacion/Numero"/>
+                                    </Numero>
+                                </xsl:if>
+                            </Identificacion>
+                            <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/PrimerApellido">
+                                <PrimerApellido>
+                                    <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/PrimerApellido"/>
+                                </PrimerApellido>
+                            </xsl:if>
+                            <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/SegundoApellido">
+                                <SegundoApellido>
+                                    <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/SegundoApellido"/>
+                                </SegundoApellido>
+                            </xsl:if>
+                            <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/PrimerNombre">
+                                <PrimerNombre>
+                                    <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/PrimerNombre"/>
+                                </PrimerNombre>
+                            </xsl:if>
+                            <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/SegundoNombre">
+                                <SegundoNombre>
+                                    <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/SegundoNombre"/>
+                                </SegundoNombre>
+                            </xsl:if>
+                            <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/FechaNacimiento">
+                                <FechaNacimiento>
+                                    <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/FechaNacimiento"/>
+                                </FechaNacimiento>
+                            </xsl:if>
+                            <Genero>
+                                <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Genero/Id">
+                                    <Id>
+                                        <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Genero/Id"/>
+                                    </Id>
+                                </xsl:if>
+                                <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Genero/Valor">
+                                    <Valor>
+                                        <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Genero/Valor"/>
+                                    </Valor>
+                                </xsl:if>
+                            </Genero>
+                            <EstadoCivil>
+                                <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/EstadoCivil/Id">
+                                    <Id>
+                                        <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/EstadoCivil/Id"/>
+                                    </Id>
+                                </xsl:if>
+                                <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/EstadoCivil/Valor">
+                                    <Valor>
+                                        <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/EstadoCivil/Valor"/>
+                                    </Valor>
+                                </xsl:if>
+                            </EstadoCivil>
+                            <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Marcacion">
+                                <Marcacion>
+                                    <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Marcacion"/>
+                                </Marcacion>
+                            </xsl:if>
+                            <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/OptinCORELE">
+                                <OptinCORELE>
+                                    <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/OptinCORELE"/>
+                                </OptinCORELE>
+                            </xsl:if>
+                            <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/OptinTELCEL">
+                                <OptinTELCEL>
+                                    <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/OptinTELCEL"/>
+                                </OptinTELCEL>
+                            </xsl:if>
+                            <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/CorreoElectronico">
+                                <CorreoElectronico>
+                                    <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/CorreoElectronico"/>
+                                </CorreoElectronico>
+                            </xsl:if>
+                            <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/TelefonoMovil">
+                                <TelefonoMovil>
+                                    <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/TelefonoMovil"/>
+                                </TelefonoMovil>
+                            </xsl:if>
+                            <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/TelefonoFijo">
+                                <TelefonoFijo>
+                                    <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/TelefonoFijo"/>
+                                </TelefonoFijo>
+                            </xsl:if>
+                            <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Direccion">
+                                <Direccion>
+                                    <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Direccion"/>
+                                </Direccion>
+                            </xsl:if>
+                            <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/DirGeorreferenciada">
+                                <DirGeorreferenciada>
+                                    <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/DirGeorreferenciada"/>
+                                </DirGeorreferenciada>
+                            </xsl:if>
+                            <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Ciudad">
+                                <Ciudad>
+                                    <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Ciudad"/>
+                                </Ciudad>
+                            </xsl:if>
+                            <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Departamento">
+                                <Departamento>
+                                    <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Departamento"/>
+                                </Departamento>
+                            </xsl:if>
+                            <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Categoria">
+                                <Categoria>
+                                    <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Categoria"/>
+                                </Categoria>
+                            </xsl:if>
+                            <Nautcli>
+                                <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Nautcli"/>
+                            </Nautcli>
+                            <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Discapacidad">
+                                <Discapacidad>
+                                    <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Discapacidad"/>
+                                </Discapacidad>
+                            </xsl:if>
+                            <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Edad">
+                                <Edad>
+                                    <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Edad"/>
+                                </Edad>
+                            </xsl:if>
+                            <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones">
+                                <Vinculaciones>
+                                    <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones/NAUTCLI">
+                                        <NAUTCLI>
+                                            <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones/NAUTCLI"/>
+                                        </NAUTCLI>
+                                    </xsl:if>
+                                    <EstadoVinculacion>
+                                        <Id>
+                                            <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones/EstadoVinculacion/Id"/>
+                                        </Id>
+                                        <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones/EstadoVinculacion/Valor">
+                                            <Valor>
+                                                <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones/EstadoVinculacion/Valor"/>
+                                            </Valor>
+                                        </xsl:if>
+                                    </EstadoVinculacion>
+                                    <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones/CodigoVinculacion">
+                                        <CodigoVinculacion>
+                                            <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones/CodigoVinculacion"/>
+                                        </CodigoVinculacion>
+                                    </xsl:if>
+                                    <IdentificiacionEmpresa>
+                                        <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones/IdentificiacionEmpresa/Id">
+                                            <Id>
+                                                <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones/IdentificiacionEmpresa/Id"/>
+                                            </Id>
+                                        </xsl:if>
+                                        <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones/IdentificiacionEmpresa/Valor">
+                                            <Valor>
+                                                <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones/IdentificiacionEmpresa/Valor"/>
+                                            </Valor>
+                                        </xsl:if>
+                                        <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones/IdentificiacionEmpresa/Numero">
+                                            <Numero>
+                                                <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones/IdentificiacionEmpresa/Numero"/>
+                                            </Numero>
+                                        </xsl:if>
+                                    </IdentificiacionEmpresa>
+                                    <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones/Cargo">
+                                        <Cargo>
+                                            <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones/Cargo"/>
+                                        </Cargo>
+                                    </xsl:if>
+                                    <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones/EmpleadoServicioDomestico">
+                                        <EmpleadoServicioDomestico>
+                                            <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Vinculaciones/EmpleadoServicioDomestico"/>
+                                        </EmpleadoServicioDomestico>
+                                    </xsl:if>
+                                </Vinculaciones>
+                            </xsl:if>
+                            <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario">
+                                <Beneficiario>
+                                    <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/NAUTCLITrabajador">
+                                        <NAUTCLITrabajador>
+                                            <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/NAUTCLITrabajador"/>
+                                        </NAUTCLITrabajador>
+                                    </xsl:if>
+                                    <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/NAUTCLIBeneficiario">
+                                        <NAUTCLIBeneficiario>
+                                            <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/NAUTCLIBeneficiario"/>
+                                        </NAUTCLIBeneficiario>
+                                    </xsl:if>
+                                    <Identificacion>
+                                        <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Identificacion/Id">
+                                            <Id>
+                                                <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Identificacion/Id"/>
+                                            </Id>
+                                        </xsl:if>
+                                        <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Identificacion/Tipo">
+                                            <Tipo>
+                                                <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Identificacion/Tipo"/>
+                                            </Tipo>
+                                        </xsl:if>
+                                        <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Identificacion/Numero">
+                                            <Numero>
+                                                <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Identificacion/Numero"/>
+                                            </Numero>
+                                        </xsl:if>
+                                    </Identificacion>
+                                    <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/PrimerApellido">
+                                        <PrimerApellido>
+                                            <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/PrimerApellido"/>
+                                        </PrimerApellido>
+                                    </xsl:if>
+                                    <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/SegundoApellido">
+                                        <SegundoApellido>
+                                            <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/SegundoApellido"/>
+                                        </SegundoApellido>
+                                    </xsl:if>
+                                    <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/PrimerNombre">
+                                        <PrimerNombre>
+                                            <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/PrimerNombre"/>
+                                        </PrimerNombre>
+                                    </xsl:if>
+                                    <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/SegundoNombre">
+                                        <SegundoNombre>
+                                            <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/SegundoNombre"/>
+                                        </SegundoNombre>
+                                    </xsl:if>
+                                    <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/FechaNacimiento">
+                                        <FechaNacimiento>
+                                            <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/FechaNacimiento"/>
+                                        </FechaNacimiento>
+                                    </xsl:if>
+                                    <Genero>
+                                        <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Genero/Id">
+                                            <Id>
+                                                <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Genero/Id"/>
+                                            </Id>
+                                        </xsl:if>
+                                        <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Genero/Valor">
+                                            <Valor>
+                                                <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Genero/Valor"/>
+                                            </Valor>
+                                        </xsl:if>
+                                    </Genero>
+                                    <EstadoCivil>
+                                        <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/EstadoCivil/Id">
+                                            <Id>
+                                                <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/EstadoCivil/Id"/>
+                                            </Id>
+                                        </xsl:if>
+                                        <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/EstadoCivil/Valor">
+                                            <Valor>
+                                                <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/EstadoCivil/Valor"/>
+                                            </Valor>
+                                        </xsl:if>
+                                    </EstadoCivil>
+                                    <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Marcacion">
+                                        <Marcacion>
+                                            <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Marcacion"/>
+                                        </Marcacion>
+                                    </xsl:if>
+                                    <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/OptionCORELE">
+                                        <OptionCORELE>
+                                            <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/OptionCORELE"/>
+                                        </OptionCORELE>
+                                    </xsl:if>
+                                    <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/OptinTELCEL">
+                                        <OptinTELCEL>
+                                            <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/OptinTELCEL"/>
+                                        </OptinTELCEL>
+                                    </xsl:if>
+                                    <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/CorreoElectronico">
+                                        <CorreoElectronico>
+                                            <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/CorreoElectronico"/>
+                                        </CorreoElectronico>
+                                    </xsl:if>
+                                    <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/TelefonoMovil">
+                                        <TelefonoMovil>
+                                            <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/TelefonoMovil"/>
+                                        </TelefonoMovil>
+                                    </xsl:if>
+                                    <TelefonoFijo>
+                                        <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/TelefonoFijo"/>
+                                    </TelefonoFijo>
+                                    <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Direccion">
+                                        <Direccion>
+                                            <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Direccion"/>
+                                        </Direccion>
+                                    </xsl:if>
+                                    <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/DirGeorreferencia">
+                                        <DirGeorreferencia>
+                                            <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/DirGeorreferencia"/>
+                                        </DirGeorreferencia>
+                                    </xsl:if>
+                                    <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Ciudad">
+                                        <Ciudad>
+                                            <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Ciudad"/>
+                                        </Ciudad>
+                                    </xsl:if>
+                                    <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Departamento">
+                                        <Departamento>
+                                            <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Departamento"/>
+                                        </Departamento>
+                                    </xsl:if>
+                                    <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Categoria">
+                                        <Categoria>
+                                            <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Categoria"/>
+                                        </Categoria>
+                                    </xsl:if>
+                                    <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Edad">
+                                        <Edad>
+                                            <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Edad"/>
+                                        </Edad>
+                                    </xsl:if>
+                                    <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Discapacidad">
+                                        <Discapacidad>
+                                            <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Discapacidad"/>
+                                        </Discapacidad>
+                                    </xsl:if>
+                                    <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/CodigoVinculacion">
+                                        <CodigoVinculacion>
+                                            <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/CodigoVinculacion"/>
+                                        </CodigoVinculacion>
+                                    </xsl:if>
+                                    <Parentesco>
+                                        <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Parentesco/Id">
+                                            <Id>
+                                                <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Parentesco/Id"/>
+                                            </Id>
+                                        </xsl:if>
+                                        <xsl:if test="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Parentesco/Valor">
+                                            <Valor>
+                                                <xsl:value-of select="$impJdbcCallSP_Ecomerce_Cons_cli/Return/ConsultarInfoUsuario_Rs/Usuario/Beneficiario/Parentesco/Valor"/>
+                                            </Valor>
+                                        </xsl:if>
+                                    </Parentesco>
+                                </Beneficiario>
+                            </xsl:if>
+                        </Usuario>
+                    </xsl:if>
+                </ConsultarInfoUsuario_Rs>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assign Fail">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>285</pd:x>
+        <pd:y>135</pd:y>
+        <config>
+            <variableName>prvarResponse</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx:ServiceResponse>
+                <pfx:ResponseHeader>
+                    <pfx:RequestDate>
+                        <xsl:value-of select="$Start/Parameters/RequestDateTime"/>
+                    </pfx:RequestDate>
+                    <pfx:ResponseDate>
+                        <xsl:value-of select="current-dateTime()"/>
+                    </pfx:ResponseDate>
+                    <pfx:ResponseCode>
+                        <xsl:value-of select="$_globalVariables/ns:GlobalVariables/ConsultarInfoUsuario/Response/UnExpectedError/ErrCode"/>
+                    </pfx:ResponseCode>
+                    <pfx:ResponseDesc>
+                        <xsl:value-of select="$_globalVariables/ns:GlobalVariables/ConsultarInfoUsuario/Response/UnExpectedError/ErrDesc"/>
+                    </pfx:ResponseDesc>
+                    <pfx:TransactionID>
+                        <xsl:value-of select="$Start/Parameters/pfx:ServiceRequest/pfx:RequestHeader/pfx:System/pfx:IPAddress"/>
+                    </pfx:TransactionID>
+                </pfx:ResponseHeader>
+            </pfx:ServiceResponse>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>MapRequest</pd:to>
+        <pd:xpathDescription>Succes</pd:xpathDescription>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>$Start/Parameters/pfx:ServiceRequest/pfx:RequestBody/pfx:Parameters/pfx:Parameter[@Key=$_globalVariables/ns:GlobalVariables/ConsultarInfoUsuario/Request/TipoId]
+and
+$Start/Parameters/pfx:ServiceRequest/pfx:RequestBody/pfx:Parameters/pfx:Parameter[@Key = $_globalVariables/ns:GlobalVariables/ConsultarInfoUsuario/Request/NumId]</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapRequest</pd:from>
+        <pd:to>impJdbcCallSP_Ecomerce_Cons_cli</pd:to>
+        <pd:xpathDescription/>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>BuildResponse</pd:from>
+        <pd:to>Assign Succes</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign Succes</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>InsertLog</pd:from>
+        <pd:to>Assign Error</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-3381760</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign Error</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-3381760</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>impJdbcCallSP_Ecomerce_Cons_cli</pd:from>
+        <pd:to>Homologaciones</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Homologaciones</pd:from>
+        <pd:to>BuildResponse</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapRequest</pd:from>
+        <pd:to>Assign Fail</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-10092544</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign Fail</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>InsertLog</pd:to>
+        <pd:lineType>Multiple Bends</pd:lineType>
+        <pd:lineColor>-3381760</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

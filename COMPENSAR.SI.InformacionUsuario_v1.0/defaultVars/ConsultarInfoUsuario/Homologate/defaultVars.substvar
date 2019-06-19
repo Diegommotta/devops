@@ -1,0 +1,45 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<repository xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xmlns = "http://www.tibco.com/xmlns/repo/types/2002">
+	<globalVariables>
+		<globalVariable>
+			<name>EstCivil</name>
+			<value>CT001CONSUSUINFOESTCIVIL</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1560440517330</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>EstVinculacion</name>
+			<value>CT001CONSUSUINFOESTVINCULACION</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1560464244363</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>Genero</name>
+			<value>CT001CONSUSUINFOGENERO</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1560440517500</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>Parentesco</name>
+			<value>CT001CONSUSUINFOPARENTESCO</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1560778663739</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>TipoId</name>
+			<value>CT001CONSUSUINFOTIPOID</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1560440483028</modTime>
+		</globalVariable>
+	</globalVariables>
+</repository>

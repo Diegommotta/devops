@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:element name="ConsultarInfoUsuario_Rq">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Identificacion" type="IdentificacionType"/>
+				<xs:element name="Opcion" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="IdentificacionType">
+		<xs:sequence>
+			<xs:element name="TipoIdentificacion" type="xs:integer"/>
+			<xs:element name="NumeroIdentificacion" type="xs:integer"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="Resultsets">
+		<xs:complexType>
+			<xs:all>
+				<xs:element name="ResultSet1" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Record1" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:all>
+										<xs:element name="TIDECLI" type="xs:int"/>
+										<xs:element name="NIDECLI" type="xs:string"/>
+										<xs:element name="XPRIAPE" type="xs:string"/>
+										<xs:element name="XSEGAPE" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="XNOMCLI" type="xs:string"/>
+										<xs:element name="XRAZSEG" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="FNACCLI" type="xs:decimal"/>
+										<xs:element name="XGENCLI" type="xs:string"/>
+										<xs:element name="XECICLI" type="xs:string"/>
+										<xs:element name="DAPTER" type="xs:boolean" nillable="true" minOccurs="0"/>
+										<xs:element name="OPTIN_CORELE" type="xs:boolean" nillable="true" minOccurs="0"/>
+										<xs:element name="OPTIN_TELCEL" type="xs:boolean" nillable="true" minOccurs="0"/>
+										<xs:element name="CORELE" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="TELCEL" type="xs:decimal" nillable="true" minOccurs="0"/>
+										<xs:element name="NTELCLI" type="xs:decimal" nillable="true" minOccurs="0"/>
+										<xs:element name="XDIR" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="DIRGEOREF" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="XCIU" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="DEPARTAMENTO" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="CATEGORIA" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="NAUTCLI" type="xs:decimal"/>
+										<xs:element name="DISCAP" type="xs:byte" nillable="true" minOccurs="0"/>
+										<xs:element name="EDAD" type="xs:int"/>
+									</xs:all>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="ResultSet2" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Record2" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:all>
+										<xs:element name="NAUTCLI" type="xs:decimal"/>
+										<xs:element name="CESTVIN" type="xs:int" nillable="true" minOccurs="0"/>
+										<xs:element name="CPRGSRV" type="xs:decimal" nillable="true" minOccurs="0"/>
+										<xs:element name="TIDECLI_EMPRESA" type="xs:int"/>
+										<xs:element name="NIDECLI_EMPRESA" type="xs:string"/>
+										<xs:element name="XVIN" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="SERV_DOMESTICO" type="xs:byte" nillable="true" minOccurs="0"/>
+									</xs:all>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="ResultSet3" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Record3" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:all>
+										<xs:element name="NAUTCLI_TRABAJADOR" type="xs:decimal"/>
+										<xs:element name="NAUTCLI_BENEFICIARIO" type="xs:decimal"/>
+										<xs:element name="TIDECLI" type="xs:int"/>
+										<xs:element name="NIDECLI" type="xs:string"/>
+										<xs:element name="XPRIAPE" type="xs:string"/>
+										<xs:element name="XSEGAPE" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="XNOMCLI" type="xs:string"/>
+										<xs:element name="XRAZSEG" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="FNACCLI" type="xs:decimal"/>
+										<xs:element name="XGENCLI" type="xs:string"/>
+										<xs:element name="XECICLI" type="xs:string"/>
+										<xs:element name="DAPTER" type="xs:boolean" nillable="true" minOccurs="0"/>
+										<xs:element name="OPTIN_CORELE" type="xs:boolean" nillable="true" minOccurs="0"/>
+										<xs:element name="OPTIN_TELCEL" type="xs:boolean" nillable="true" minOccurs="0"/>
+										<xs:element name="CORELE" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="TELCEL" type="xs:decimal" nillable="true" minOccurs="0"/>
+										<xs:element name="NTELCLI" type="xs:decimal" nillable="true" minOccurs="0"/>
+										<xs:element name="XDIR" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="DIRGEOREF" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="XCIU" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="DEPARTAMENTO" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="CATEGORIA" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="EDAD" type="xs:int"/>
+										<xs:element name="DISCAP" type="xs:byte" nillable="true" minOccurs="0"/>
+										<xs:element name="CPRGSRV" type="xs:decimal" nillable="true" minOccurs="0"/>
+										<xs:element name="CPRN" type="xs:string" nillable="true" minOccurs="0"/>
+									</xs:all>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="ConsultarInfoUsuario_Rs">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Usuario" minOccurs="0">
+					<xs:complexType>
+						<xs:all>
+							<xs:element name="Identificacion" minOccurs="0">
+								<xs:complexType>
+									<xs:all>
+										<xs:element name="Id" type="xs:string" minOccurs="0"/>
+										<xs:element name="Tipo" type="xs:int" minOccurs="0"/>
+										<xs:element name="Numero" type="xs:string" minOccurs="0"/>
+									</xs:all>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="PrimerApellido" type="xs:string" minOccurs="0"/>
+							<xs:element name="SegundoApellido" type="xs:string" minOccurs="0"/>
+							<xs:element name="PrimerNombre" type="xs:string" minOccurs="0"/>
+							<xs:element name="SegundoNombre" type="xs:string" minOccurs="0"/>
+							<xs:element name="FechaNacimiento" type="xs:string" minOccurs="0"/>
+							<xs:element name="Genero" minOccurs="0">
+								<xs:complexType>
+									<xs:all>
+										<xs:element name="Id" type="xs:string" minOccurs="0"/>
+										<xs:element name="Valor" type="xs:string" minOccurs="0"/>
+									</xs:all>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="EstadoCivil" minOccurs="0">
+								<xs:complexType>
+									<xs:all>
+										<xs:element name="Id" type="xs:string" minOccurs="0"/>
+										<xs:element name="Valor" type="xs:string" minOccurs="0"/>
+									</xs:all>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="Marcacion" type="xs:boolean" minOccurs="0"/>
+							<xs:element name="OptinCORELE" type="xs:byte" minOccurs="0"/>
+							<xs:element name="OptinTELCEL" type="xs:byte" minOccurs="0"/>
+							<xs:element name="CorreoElectronico" type="xs:string" minOccurs="0"/>
+							<xs:element name="TelefonoMovil" type="xs:string" minOccurs="0"/>
+							<xs:element name="TelefonoFijo" type="xs:string" minOccurs="0"/>
+							<xs:element name="Direccion" type="xs:string" minOccurs="0"/>
+							<xs:element name="DirGeorreferenciada" type="xs:string" minOccurs="0"/>
+							<xs:element name="Ciudad" type="xs:string" minOccurs="0"/>
+							<xs:element name="Departamento" type="xs:string" minOccurs="0"/>
+							<xs:element name="Categoria" type="xs:string" minOccurs="0"/>
+							<xs:element name="Nautcli" type="xs:decimal" minOccurs="0"/>
+							<xs:element name="Discapacidad" type="xs:byte" minOccurs="0"/>
+							<xs:element name="Edad" type="xs:int" minOccurs="0"/>
+							<xs:element name="Vinculaciones" minOccurs="0">
+								<xs:complexType>
+									<xs:all>
+										<xs:element name="NAUTCLI" type="xs:decimal" minOccurs="0"/>
+										<xs:element name="EstadoVinculacion" minOccurs="0">
+											<xs:complexType>
+												<xs:all>
+													<xs:element name="Id" type="xs:string" minOccurs="0"/>
+													<xs:element name="Valor" type="xs:string" minOccurs="0"/>
+												</xs:all>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="CodigoVinculacion" type="xs:decimal" minOccurs="0"/>
+										<xs:element name="IdentificiacionEmpresa" minOccurs="0">
+											<xs:complexType>
+												<xs:all>
+													<xs:element name="Id" type="xs:string" minOccurs="0"/>
+													<xs:element name="Valor" type="xs:string" minOccurs="0"/>
+													<xs:element name="Numero" type="xs:string" minOccurs="0"/>
+												</xs:all>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="Cargo" type="xs:string" minOccurs="0"/>
+										<xs:element name="EmpleadoServicioDomestico" type="xs:byte" minOccurs="0"/>
+									</xs:all>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="Beneficiario" minOccurs="0">
+								<xs:complexType>
+									<xs:all>
+										<xs:element name="NAUTCLITrabajador" type="xs:decimal" minOccurs="0"/>
+										<xs:element name="NAUTCLIBeneficiario" type="xs:decimal" minOccurs="0"/>
+										<xs:element name="Identificacion" minOccurs="0">
+											<xs:complexType>
+												<xs:all>
+													<xs:element name="Id" type="xs:string" minOccurs="0"/>
+													<xs:element name="Tipo" type="xs:int" minOccurs="0"/>
+													<xs:element name="Numero" type="xs:string" minOccurs="0"/>
+												</xs:all>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="PrimerApellido" type="xs:string" minOccurs="0"/>
+										<xs:element name="SegundoApellido" type="xs:string" minOccurs="0"/>
+										<xs:element name="PrimerNombre" type="xs:string" minOccurs="0"/>
+										<xs:element name="SegundoNombre" type="xs:string" minOccurs="0"/>
+										<xs:element name="FechaNacimiento" type="xs:string" minOccurs="0"/>
+										<xs:element name="Genero" minOccurs="0">
+											<xs:complexType>
+												<xs:all>
+													<xs:element name="Id" type="xs:string" minOccurs="0"/>
+													<xs:element name="Valor" type="xs:string" minOccurs="0"/>
+												</xs:all>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="EstadoCivil" minOccurs="0">
+											<xs:complexType>
+												<xs:all>
+													<xs:element name="Id" type="xs:string" minOccurs="0"/>
+													<xs:element name="Valor" type="xs:string" minOccurs="0"/>
+												</xs:all>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="Marcacion" type="xs:boolean" minOccurs="0"/>
+										<xs:element name="OptionCORELE" type="xs:byte" minOccurs="0"/>
+										<xs:element name="OptinTELCEL" type="xs:byte" minOccurs="0"/>
+										<xs:element name="CorreoElectronico" type="xs:string" minOccurs="0"/>
+										<xs:element name="TelefonoMovil" type="xs:string" minOccurs="0"/>
+										<xs:element name="TelefonoFijo" type="xs:string" minOccurs="0"/>
+										<xs:element name="Direccion" type="xs:string" minOccurs="0"/>
+										<xs:element name="DirGeorreferencia" type="xs:string" minOccurs="0"/>
+										<xs:element name="Ciudad" type="xs:string" minOccurs="0"/>
+										<xs:element name="Departamento" type="xs:string" minOccurs="0"/>
+										<xs:element name="Categoria" type="xs:string" minOccurs="0"/>
+										<xs:element name="Edad" type="xs:int" minOccurs="0"/>
+										<xs:element name="Discapacidad" type="xs:string" minOccurs="0"/>
+										<xs:element name="CodigoVinculacion" type="xs:decimal" minOccurs="0"/>
+										<xs:element name="Parentesco" minOccurs="0">
+											<xs:complexType>
+												<xs:all>
+													<xs:element name="Id" type="xs:string" minOccurs="0"/>
+													<xs:element name="Valor" type="xs:string" minOccurs="0"/>
+												</xs:all>
+											</xs:complexType>
+										</xs:element>
+									</xs:all>
+								</xs:complexType>
+							</xs:element>
+						</xs:all>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

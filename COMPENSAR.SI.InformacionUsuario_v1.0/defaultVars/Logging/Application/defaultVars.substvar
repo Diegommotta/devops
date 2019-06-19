@@ -1,0 +1,29 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<repository xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xmlns = "http://www.tibco.com/xmlns/repo/types/2002">
+	<globalVariables>
+		<globalVariable>
+			<name>ComponentID</name>
+			<value>SI.INFOUSUARIO.01</value>
+			<deploymentSettable>false</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1554308710581</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>ErrorID</name>
+			<value>SI.INFOUSUARIO.GN_ERR.01</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1554308710817</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>ServiceName</name>
+			<value>SI.InformacionUsuario</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1554308710701</modTime>
+		</globalVariable>
+	</globalVariables>
+</repository>

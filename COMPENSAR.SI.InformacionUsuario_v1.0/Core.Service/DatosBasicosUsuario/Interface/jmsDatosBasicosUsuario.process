@@ -1,0 +1,561 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pfx="http://www.compensar.com.co/Commons/framework/BusMessage/v1.0" xmlns:ns="http://www.compensar.com/middleware/commons/InsertLog/v1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://www.tibco.com/pe/EngineTypes" xmlns:ns3="http://www.compensar.com/Commons/framework/Header/v1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns6="http://www.compensar.com/services/commons/ServiceManager" xmlns:ns5="http://www.compensar.com.co/Commons/framework/Error/v1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003">
+    <xsd:import namespace="http://www.compensar.com.co/Commons/framework/BusMessage/v1.0" schemaLocation="/Framework/Schemas/BusMessage.xsd"/>
+    <xsd:import namespace="http://www.compensar.com/services/commons/ServiceManager" schemaLocation="/Core.Service/DatosBasicosUsuario/Schema/ServiceManager.xsd"/>
+    <pd:name>Core.Service/DatosBasicosUsuario/Interface/jmsDatosBasicosUsuario.process</pd:name>
+    <pd:startName>JMSReceiver</pd:startName>
+    <pd:startX>0</pd:startX>
+    <pd:startY>0</pd:startY>
+    <pd:returnBindings/>
+    <pd:starter name="JMSReceiver">
+        <pd:type>com.tibco.plugin.jms.JMSQueueEventSource</pd:type>
+        <pd:resourceType>ae.activities.JMSQueueEventSource</pd:resourceType>
+        <pd:x>72</pd:x>
+        <pd:y>55</pd:y>
+        <config>
+            <PermittedMessageType>XML Text</PermittedMessageType>
+            <SessionAttributes>
+                <transacted>false</transacted>
+                <acknowledgeMode>1</acknowledgeMode>
+                <maxSessions>1</maxSessions>
+                <destination>%%infoUsuario/DatosBasicos/JMS/inputQueue%%</destination>
+            </SessionAttributes>
+            <ConfigurableHeaders>
+                <JMSDeliveryMode>PERSISTENT</JMSDeliveryMode>
+                <JMSExpiration>0</JMSExpiration>
+                <JMSPriority>4</JMSPriority>
+            </ConfigurableHeaders>
+            <ConnectionReference>/Framework/Connection/jmsFrameworkConnection.sharedjmscon</ConnectionReference>
+            <OutDataxsdString ref="pfx:BusMessage"/>
+        </config>
+        <pd:inputBindings/>
+    </pd:starter>
+    <pd:endName>End</pd:endName>
+    <pd:endX>737</pd:endX>
+    <pd:endY>55</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1512567193627</pd:targetNamespace>
+    <pd:activity name="MapData">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>170</pd:x>
+        <pd:y>55</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Logging">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="TrxID" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="ESBTrxID" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="ServiceName" type="xsd:string"/>
+                                        <xsd:element name="OperationName" type="xsd:string"/>
+                                        <xsd:element name="ApplicationID" type="xsd:string" minOccurs="0"/>
+                                        <xsd:element name="OperationInvokerName" type="xsd:string" minOccurs="0"/>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <Logging>
+                    <xsl:if test="$JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage/ns3:Header/ns3:ID">
+                        <TrxID>
+                            <xsl:value-of select="$JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage/ns3:Header/ns3:ID"/>
+                        </TrxID>
+                    </xsl:if>
+                    <xsl:if test="$JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage/ns3:Header/ns3:ESBIdentifier">
+                        <ESBTrxID>
+                            <xsl:value-of select="$JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage/ns3:Header/ns3:ESBIdentifier"/>
+                        </ESBTrxID>
+                    </xsl:if>
+                    <ServiceName>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/Logging/Application/ServiceName"/>
+                    </ServiceName>
+                    <OperationName>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/infoUsuario/DatosBasicos/Logging/OperationName"/>
+                    </OperationName>
+                    <xsl:if test="$JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage/ns3:Header/ns3:ApplicationID">
+                        <ApplicationID>
+                            <xsl:value-of select="$JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage/ns3:Header/ns3:ApplicationID"/>
+                        </ApplicationID>
+                    </xsl:if>
+                    <xsl:if test="$JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage/ns3:Header/ns3:OperationInvokerName">
+                        <OperationInvokerName>
+                            <xsl:value-of select="$JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage/ns3:Header/ns3:OperationInvokerName"/>
+                        </OperationInvokerName>
+                    </xsl:if>
+                </Logging>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="InputLog">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>259</pd:x>
+        <pd:y>55</pd:y>
+        <config>
+            <processName>/Logging/Services/InsertLog.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:Logs>
+                <ns:TrxID>
+                    <xsl:value-of select="$MapData/root/Logging/TrxID"/>
+                </ns:TrxID>
+                <xsl:if test="$MapData/root/Logging/ESBTrxID">
+                    <ns:ESBTransactionIdentifier>
+                        <xsl:value-of select="$MapData/root/Logging/ESBTrxID"/>
+                    </ns:ESBTransactionIdentifier>
+                </xsl:if>
+                <ns:ServiceName>
+                    <xsl:value-of select="$MapData/root/Logging/ServiceName"/>
+                </ns:ServiceName>
+                <ns:OperationName>
+                    <xsl:value-of select="$MapData/root/Logging/OperationName"/>
+                </ns:OperationName>
+                <xsl:if test="$MapData/root/Logging/ApplicationID">
+                    <ns:AplicationID>
+                        <xsl:value-of select="$MapData/root/Logging/ApplicationID"/>
+                    </ns:AplicationID>
+                </xsl:if>
+                <ns:TimeStp>
+                    <xsl:value-of select="current-dateTime()"/>
+                </ns:TimeStp>
+                <ns:Desc>
+                    <xsl:value-of select="'> Solicitud recibida'"/>
+                </ns:Desc>
+                <ns:Msg>
+                    <xsl:value-of select="tib:render-xml($JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage)"/>
+                </ns:Msg>
+                <ns:LogLevel>
+                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/Logging/LogLevel/auditCategory"/>
+                </ns:LogLevel>
+                <xsl:if test="$MapData/root/Logging/OperationInvokerName">
+                    <ns:OperationInvokerName>
+                        <xsl:value-of select="$MapData/root/Logging/OperationInvokerName"/>
+                    </ns:OperationInvokerName>
+                </xsl:if>
+            </ns:Logs>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="OutputLog">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>624</pd:x>
+        <pd:y>55</pd:y>
+        <config>
+            <processName>/Logging/Services/InsertLog.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:Logs>
+                <ns:TrxID>
+                    <xsl:value-of select="$MapData/root/Logging/TrxID"/>
+                </ns:TrxID>
+                <xsl:if test="$MapData/root/Logging/ESBTrxID">
+                    <ns:ESBTransactionIdentifier>
+                        <xsl:value-of select="$MapData/root/Logging/ESBTrxID"/>
+                    </ns:ESBTransactionIdentifier>
+                </xsl:if>
+                <ns:ServiceName>
+                    <xsl:value-of select="$MapData/root/Logging/ServiceName"/>
+                </ns:ServiceName>
+                <ns:OperationName>
+                    <xsl:value-of select="$MapData/root/Logging/OperationName"/>
+                </ns:OperationName>
+                <xsl:if test="$MapData/root/Logging/ApplicationID">
+                    <ns:AplicationID>
+                        <xsl:value-of select="$MapData/root/Logging/ApplicationID"/>
+                    </ns:AplicationID>
+                </xsl:if>
+                <ns:TimeStp>
+                    <xsl:value-of select="current-dateTime()"/>
+                </ns:TimeStp>
+                <ns:Desc>
+                    <xsl:value-of select="'> Respuesta enviada'"/>
+                </ns:Desc>
+                <ns:Msg>
+                    <xsl:value-of select="tib:render-xml($impDatosBasicos-Usuario/Return/ns6:ServiceResponse)"/>
+                </ns:Msg>
+                <ns:LogLevel>
+                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/Logging/LogLevel/auditCategory"/>
+                </ns:LogLevel>
+                <xsl:if test="$MapData/root/Logging/OperationInvokerName">
+                    <ns:OperationInvokerName>
+                        <xsl:value-of select="$MapData/root/Logging/OperationInvokerName"/>
+                    </ns:OperationInvokerName>
+                </xsl:if>
+            </ns:Logs>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ErrorLog">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>630</pd:x>
+        <pd:y>165</pd:y>
+        <config>
+            <processName>/Logging/Services/InsertLog.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:Logs>
+                <ns:TrxID>
+                    <xsl:value-of select="$MapData/root/Logging/TrxID"/>
+                </ns:TrxID>
+                <xsl:if test="$MapData/root/Logging/ESBTrxID">
+                    <ns:ESBTransactionIdentifier>
+                        <xsl:value-of select="$MapData/root/Logging/ESBTrxID"/>
+                    </ns:ESBTransactionIdentifier>
+                </xsl:if>
+                <ns:ServiceName>
+                    <xsl:value-of select="$MapData/root/Logging/ServiceName"/>
+                </ns:ServiceName>
+                <ns:OperationName>
+                    <xsl:value-of select="$MapData/root/Logging/OperationName"/>
+                </ns:OperationName>
+                <xsl:if test="$MapData/root/Logging/ApplicationID">
+                    <ns:AplicationID>
+                        <xsl:value-of select="$MapData/root/Logging/ApplicationID"/>
+                    </ns:AplicationID>
+                </xsl:if>
+                <ns:TimeStp>
+                    <xsl:value-of select="$MapError/root/errorDateTime"/>
+                </ns:TimeStp>
+                <ns:Desc>
+                    <xsl:value-of select="'ERROR en el procesamiento'"/>
+                </ns:Desc>
+                <ns:Msg>
+                    <xsl:value-of select="tib:render-xml($JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage)"/>
+                </ns:Msg>
+                <ns:LogLevel>
+                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/Logging/LogLevel/LogLevel"/>
+                </ns:LogLevel>
+                <xsl:if test="$MapData/root/Logging/OperationInvokerName">
+                    <ns:OperationInvokerName>
+                        <xsl:value-of select="$MapData/root/Logging/OperationInvokerName"/>
+                    </ns:OperationInvokerName>
+                </xsl:if>
+                <ns:ErrorID>
+                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/Logging/Application/ErrorID"/>
+                </ns:ErrorID>
+                <xsl:choose>
+                    <xsl:when test="$_error/ns4:ErrorReport/Data/ExternalServiceException">
+                        <ns:ErrorDesc>
+                            <xsl:value-of select="$_error/ns4:ErrorReport/Data/ExternalServiceException/descrition"/>
+                        </ns:ErrorDesc>
+                        <ns:ErrorMsg>
+                            <xsl:value-of select="$_error/ns4:ErrorReport/Data/ExternalServiceException/detail"/>
+                        </ns:ErrorMsg>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <ns:ErrorDesc>
+                            <xsl:value-of select="concat('ERROR [', $_error/ns4:ErrorReport/Class, '; ', $_error/ns4:ErrorReport/Msg, ']')"/>
+                        </ns:ErrorDesc>
+                        <ns:ErrorMsg>
+                            <xsl:value-of select="tib:render-xml($_error/ns4:ErrorReport)"/>
+                        </ns:ErrorMsg>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </ns:Logs>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="CatchAll">
+        <pd:type>com.tibco.pe.core.CatchActivity</pd:type>
+        <pd:resourceType>ae.activities.catch</pd:resourceType>
+        <pd:x>258</pd:x>
+        <pd:y>165</pd:y>
+        <pd:handler>true</pd:handler>
+        <config>
+            <catchAll>true</catchAll>
+        </config>
+        <pd:inputBindings/>
+    </pd:activity>
+    <pd:activity name="MapError">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>381</pd:x>
+        <pd:y>165</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="errorDateTime" type="xsd:dateTime"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <errorDateTime>
+                    <xsl:value-of select="current-dateTime()"/>
+                </errorDateTime>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="RespSyncMsg">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>505</pd:x>
+        <pd:y>55</pd:y>
+        <config>
+            <processName>/Framework/Services/RespSyncMsg.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <JMS>
+                    <ResponseQueue>
+                        <xsl:value-of select="$JMSReceiver/ns2:ActivityOutput/JMSHeaders/ns2:JMSReplyTo"/>
+                    </ResponseQueue>
+                </JMS>
+                <Logging>
+                    <ComponentID>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/Logging/Application/ComponentID"/>
+                    </ComponentID>
+                </Logging>
+                <pfx:BusMessage>
+                    <ns3:Header>
+                        <ns3:ID>
+                            <xsl:value-of select="$JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage/ns3:Header/ns3:ID"/>
+                        </ns3:ID>
+                        <ns3:Operation>
+                            <xsl:value-of select="$JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage/ns3:Header/ns3:Operation"/>
+                        </ns3:Operation>
+                        <ns3:RequestSystem>
+                            <xsl:value-of select="$JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage/ns3:Header/ns3:RequestSystem"/>
+                        </ns3:RequestSystem>
+                        <ns3:Version>
+                            <xsl:value-of select="$JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage/ns3:Header/ns3:Version"/>
+                        </ns3:Version>
+                        <ns3:Type>OUT</ns3:Type>
+                        <ns3:ReqType>
+                            <xsl:value-of select="$JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage/ns3:Header/ns3:ReqType"/>
+                        </ns3:ReqType>
+                        <ns3:RequestDateTime>
+                            <xsl:value-of select="$JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage/ns3:Header/ns3:RequestDateTime"/>
+                        </ns3:RequestDateTime>
+                        <ns3:ResponseDateTime>
+                            <xsl:value-of select="current-dateTime()"/>
+                        </ns3:ResponseDateTime>
+                        <xsl:if test="$JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage/ns3:Header/ns3:OperationInvokerName">
+                            <ns3:OperationInvokerName>
+                                <xsl:value-of select="$JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage/ns3:Header/ns3:OperationInvokerName"/>
+                            </ns3:OperationInvokerName>
+                        </xsl:if>
+                        <xsl:if test="$JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage/ns3:Header/ns3:ESBIdentifier">
+                            <ns3:ESBIdentifier>
+                                <xsl:value-of select="$JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage/ns3:Header/ns3:ESBIdentifier"/>
+                            </ns3:ESBIdentifier>
+                        </xsl:if>
+                        <xsl:if test="$JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage/ns3:Header/ns3:ApplicationID">
+                            <ns3:ApplicationID>
+                                <xsl:value-of select="$JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage/ns3:Header/ns3:ApplicationID"/>
+                            </ns3:ApplicationID>
+                        </xsl:if>
+                    </ns3:Header>
+                    <pfx:Body>
+                        <xsl:copy-of select="$impDatosBasicos-Usuario/Return/ns6:ServiceResponse"/>
+                    </pfx:Body>
+                </pfx:BusMessage>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="SyncErrorMsg">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>515</pd:x>
+        <pd:y>165</pd:y>
+        <config>
+            <processName>/Framework/Services/RespSyncMsg.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Input>
+                <JMS>
+                    <ResponseQueue>
+                        <xsl:value-of select="$JMSReceiver/ns2:ActivityOutput/JMSHeaders/ns2:JMSReplyTo"/>
+                    </ResponseQueue>
+                </JMS>
+                <Logging>
+                    <ComponentID>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/Logging/Application/ComponentID"/>
+                    </ComponentID>
+                </Logging>
+                <pfx:BusMessage>
+                    <ns3:Header>
+                        <ns3:ID>
+                            <xsl:value-of select="$JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage/ns3:Header/ns3:ID"/>
+                        </ns3:ID>
+                        <ns3:Operation>
+                            <xsl:value-of select="$JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage/ns3:Header/ns3:Operation"/>
+                        </ns3:Operation>
+                        <ns3:RequestSystem>
+                            <xsl:value-of select="$JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage/ns3:Header/ns3:RequestSystem"/>
+                        </ns3:RequestSystem>
+                        <ns3:Version>
+                            <xsl:value-of select="$JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage/ns3:Header/ns3:Version"/>
+                        </ns3:Version>
+                        <ns3:Type>OUT</ns3:Type>
+                        <ns3:ReqType>
+                            <xsl:value-of select="$JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage/ns3:Header/ns3:ReqType"/>
+                        </ns3:ReqType>
+                        <ns3:RequestDateTime>
+                            <xsl:value-of select="$JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage/ns3:Header/ns3:RequestDateTime"/>
+                        </ns3:RequestDateTime>
+                        <ns3:ResponseDateTime>
+                            <xsl:value-of select="$MapError/root/errorDateTime"/>
+                        </ns3:ResponseDateTime>
+                        <xsl:if test="$JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage/ns3:Header/ns3:OperationInvokerName">
+                            <ns3:OperationInvokerName>
+                                <xsl:value-of select="$JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage/ns3:Header/ns3:OperationInvokerName"/>
+                            </ns3:OperationInvokerName>
+                        </xsl:if>
+                        <xsl:if test="$JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage/ns3:Header/ns3:ESBIdentifier">
+                            <ns3:ESBIdentifier>
+                                <xsl:value-of select="$JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage/ns3:Header/ns3:ESBIdentifier"/>
+                            </ns3:ESBIdentifier>
+                        </xsl:if>
+                        <xsl:if test="$JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage/ns3:Header/ns3:ApplicationID">
+                            <ns3:ApplicationID>
+                                <xsl:value-of select="$JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage/ns3:Header/ns3:ApplicationID"/>
+                            </ns3:ApplicationID>
+                        </xsl:if>
+                    </ns3:Header>
+                    <xsl:choose>
+                        <xsl:when test="$_error/ns4:ErrorReport/Data/ExternalServiceException">
+                            <ns5:Error>
+                                <ns5:Code>
+                                    <xsl:value-of select="$_error/ns4:ErrorReport/Data/ExternalServiceException/code"/>
+                                </ns5:Code>
+                                <ns5:Message>
+                                    <xsl:value-of select="$_error/ns4:ErrorReport/Data/ExternalServiceException/description"/>
+                                </ns5:Message>
+                                <ns5:Detail>
+                                    <xsl:value-of select="$_error/ns4:ErrorReport/Data/ExternalServiceException/detail"/>
+                                </ns5:Detail>
+                                <ns5:ResponseDateTime>
+                                    <xsl:value-of select="$MapError/root/errorDateTime"/>
+                                </ns5:ResponseDateTime>
+                            </ns5:Error>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <ns5:Error>
+                                <ns5:Code>
+                                    <xsl:value-of select="'02'"/>
+                                </ns5:Code>
+                                <ns5:Message>
+                                    <xsl:value-of select="concat('ERROR [', $_error/ns4:ErrorReport/Class, '; ', $_error/ns4:ErrorReport/Msg, ']')"/>
+                                </ns5:Message>
+                                <ns5:Detail>
+                                    <xsl:value-of select="concat($_error/ns4:ErrorReport/FullClass, '; ', $_error/ns4:ErrorReport/StackTrace)"/>
+                                </ns5:Detail>
+                                <ns5:ResponseDateTime>
+                                    <xsl:value-of select="$MapError/root/errorDateTime"/>
+                                </ns5:ResponseDateTime>
+                            </ns5:Error>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    <pfx:Body>
+                        <Response xsi:nil="true"/>
+                    </pfx:Body>
+                </pfx:BusMessage>
+            </Input>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="impDatosBasicos Usuario">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>375</pd:x>
+        <pd:y>63</pd:y>
+        <config>
+            <processName>/Core.Service/DatosBasicosUsuario/Implementation/impDatosBasicosUsuario.process</processName>
+        </config>
+        <pd:coercions>
+            <pd:coercion xpath="$JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage/pfx:Body/*" element="ns6:ServiceRequest"/>
+        </pd:coercions>
+        <pd:inputBindings>
+            <Parameters>
+                <RequestDateTime>
+                    <xsl:value-of select="$JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage/ns3:Header/ns3:RequestDateTime"/>
+                </RequestDateTime>
+                <xsl:copy-of select="$MapData/root/Logging"/>
+                <xsl:copy-of select="$JMSReceiver/ns2:ActivityOutput/Body/pfx:BusMessage/pfx:Body/ns6:ServiceRequest"/>
+            </Parameters>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>JMSReceiver</pd:from>
+        <pd:to>MapData</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapData</pd:from>
+        <pd:to>InputLog</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>InputLog</pd:from>
+        <pd:to>impDatosBasicos Usuario</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>impDatosBasicos Usuario</pd:from>
+        <pd:to>RespSyncMsg</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>RespSyncMsg</pd:from>
+        <pd:to>OutputLog</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>OutputLog</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>CatchAll</pd:from>
+        <pd:to>MapError</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-10092544</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapError</pd:from>
+        <pd:to>SyncErrorMsg</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-10092544</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>SyncErrorMsg</pd:from>
+        <pd:to>ErrorLog</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-10092544</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ErrorLog</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-10092544</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

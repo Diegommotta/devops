@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pfx="http://www.compensar.com.co/Commons/framework/Error/v1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:pfx2="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:ns="http://www.compensar.com/middleware/commons/InsertLog/v1.0" xmlns:pfx3="http://www.tibco.com/ns/no_namespace_schema_location/Core.Service/DatosBasicosUsuario/Schema/InfoUsu_DatosBasicosUsuario_NN.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns2="http://schemas.tibco.com/bw/plugins/jdbc/5.0/jdbcExceptions" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns3="http://www.tibco.com/pe/EngineTypes">
+    <xsd:import namespace="http://www.compensar.com.co/Commons/framework/Error/v1.0" schemaLocation="/Framework/Schemas/Error.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/Core.Service/DatosBasicosUsuario/Schema/InfoUsu_DatosBasicosUsuario_NN.xsd" schemaLocation="/Core.Service/DatosBasicosUsuario/Schema/InfoUsu_DatosBasicosUsuario_NN.xsd"/>
+    <pd:name>Core.Service/DatosBasicosUsuario/Implementation/impJdbcCallPA_VIN_PORT_CLI1.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Parameters">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Logging">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="TrxID" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="ESBTrxID" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="ServiceName" type="xsd:string"/>
+                                <xsd:element name="OperationName" type="xsd:string"/>
+                                <xsd:element name="ApplicationID" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="OperationInvokerName" type="xsd:string" minOccurs="0"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element ref="pfx3:DatosBasicosDigiturno_Rq"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>49</pd:startX>
+    <pd:startY>55</pd:startY>
+    <pd:returnBindings>
+        <Return>
+            <DatosBasicosDigiturno_Rs>
+                <xsl:variable name="varRecord" select="$ParseXML-ResultSet/Resultsets/ResultSet1/Record1[1]"/>
+                <xsl:choose>
+                    <xsl:when test="exists($varRecord)">
+                        <datosPersona>
+                            <Identificacion>
+                                <TipoIdentificacion>
+                                    <xsl:value-of select="$varRecord/tipoIdentificacionPrincipal"/>
+                                </TipoIdentificacion>
+                                <NumeroIdentificacion>
+                                    <xsl:value-of select="$varRecord/NumeroIdentificacionPrincipal"/>
+                                </NumeroIdentificacion>
+                            </Identificacion>
+                            <ApellidoPrimero>
+                                <xsl:value-of select="$varRecord/PrimerApellido"/>
+                            </ApellidoPrimero>
+                            <ApellidoSegundo>
+                                <xsl:value-of select="$varRecord/SegundoApellido"/>
+                            </ApellidoSegundo>
+                            <NombrePrimero>
+                                <xsl:value-of select="$varRecord/primerNombre"/>
+                            </NombrePrimero>
+                            <NombreSegundo>
+                                <xsl:value-of select="$varRecord/segundoNombreEmpRS"/>
+                            </NombreSegundo>
+                        </datosPersona>
+                    </xsl:when>
+                    <xsl:otherwise/>
+                </xsl:choose>
+            </DatosBasicosDigiturno_Rs>
+        </Return>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="Return">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx3:DatosBasicosDigiturno_Rs"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>587</pd:endX>
+    <pd:endY>55</pd:endY>
+    <pd:errorSchemas>
+        <ProcessErrors>
+            <xsd:element name="ExternalServiceException">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="code" type="xsd:string"/>
+                        <xsd:element name="description" type="xsd:string"/>
+                        <xsd:element name="detail" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ProcessErrors>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1526584708859</pd:targetNamespace>
+    <pd:activity name="InputLog">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>149</pd:x>
+        <pd:y>55</pd:y>
+        <config>
+            <processName>/Logging/Services/InsertLog.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:Logs>
+                <ns:TrxID>
+                    <xsl:value-of select="$Start/Parameters/Logging/TrxID"/>
+                </ns:TrxID>
+                <xsl:if test="$Start/Parameters/Logging/ESBTrxID">
+                    <ns:ESBTransactionIdentifier>
+                        <xsl:value-of select="$Start/Parameters/Logging/ESBTrxID"/>
+                    </ns:ESBTransactionIdentifier>
+                </xsl:if>
+                <ns:ServiceName>
+                    <xsl:value-of select="$Start/Parameters/Logging/ServiceName"/>
+                </ns:ServiceName>
+                <ns:OperationName>
+                    <xsl:value-of select="$Start/Parameters/Logging/OperationName"/>
+                </ns:OperationName>
+                <xsl:if test="$Start/Parameters/Logging/ApplicationID">
+                    <ns:AplicationID>
+                        <xsl:value-of select="$Start/Parameters/Logging/ApplicationID"/>
+                    </ns:AplicationID>
+                </xsl:if>
+                <ns:TimeStp>
+                    <xsl:value-of select="current-dateTime()"/>
+                </ns:TimeStp>
+                <ns:Desc>
+                    <xsl:value-of select="'+ Inicia llamado PA PA_VIN_PORT_CLI1'"/>
+                </ns:Desc>
+                <ns:Msg>
+                    <xsl:value-of select="tib:render-xml($Start/Parameters/DatosBasicosDigiturno_Rq)"/>
+                </ns:Msg>
+                <ns:LogLevel>
+                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/Logging/LogLevel/LogLevel"/>
+                </ns:LogLevel>
+                <xsl:if test="$Start/Parameters/Logging/OperationInvokerName">
+                    <ns:OperationInvokerName>
+                        <xsl:value-of select="$Start/Parameters/Logging/OperationInvokerName"/>
+                    </ns:OperationInvokerName>
+                </xsl:if>
+            </ns:Logs>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="OutputLog">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>344</pd:x>
+        <pd:y>55</pd:y>
+        <config>
+            <processName>/Logging/Services/InsertLog.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:Logs>
+                <ns:TrxID>
+                    <xsl:value-of select="$Start/Parameters/Logging/TrxID"/>
+                </ns:TrxID>
+                <xsl:if test="$Start/Parameters/Logging/ESBTrxID">
+                    <ns:ESBTransactionIdentifier>
+                        <xsl:value-of select="$Start/Parameters/Logging/ESBTrxID"/>
+                    </ns:ESBTransactionIdentifier>
+                </xsl:if>
+                <ns:ServiceName>
+                    <xsl:value-of select="$Start/Parameters/Logging/ServiceName"/>
+                </ns:ServiceName>
+                <ns:OperationName>
+                    <xsl:value-of select="$Start/Parameters/Logging/OperationName"/>
+                </ns:OperationName>
+                <xsl:if test="$Start/Parameters/Logging/ApplicationID">
+                    <ns:AplicationID>
+                        <xsl:value-of select="$Start/Parameters/Logging/ApplicationID"/>
+                    </ns:AplicationID>
+                </xsl:if>
+                <ns:TimeStp>
+                    <xsl:value-of select="current-dateTime()"/>
+                </ns:TimeStp>
+                <ns:Desc>
+                    <xsl:value-of select="'+ Finaliza llamado PA PA_VIN_PORT_CLI1'"/>
+                </ns:Desc>
+                <ns:Msg>
+                    <xsl:value-of select="tib:render-xml($JDBC-Call-Procedure/resultSet)"/>
+                </ns:Msg>
+                <ns:LogLevel>
+                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/Logging/LogLevel/LogLevel"/>
+                </ns:LogLevel>
+            </ns:Logs>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="JDBC Call Procedure">
+        <pd:type>com.tibco.plugin.jdbc.JDBCCallActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCCallActivity</pd:resourceType>
+        <pd:x>245</pd:x>
+        <pd:y>63</pd:y>
+        <config>
+            <timeout>%%infoUsuario/DatosBasicos/ExternalService/JDBC/StoreProcedure/timeoutInSec%%</timeout>
+            <maxRows>%%infoUsuario/DatosBasicos/ExternalService/JDBC/StoreProcedure/maxRows%%</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/Core.Service/DatosBasicosUsuario/Connections/jdbcconnComClientes.sharedjdbc</jdbcSharedConfig>
+            <ProcedureName>%%infoUsuario/DatosBasicos/ExternalService/JDBC/StoreProcedure/procedureName%%</ProcedureName>
+            <parameterTypes>
+                <parameter>
+                    <colName>@RETURN_VALUE</colName>
+                    <colType>5</colType>
+                    <dataType>4</dataType>
+                    <typeName>int</typeName>
+                </parameter>
+                <parameter>
+                    <colName>@NumeroDocumento</colName>
+                    <colType>1</colType>
+                    <dataType>3</dataType>
+                    <typeName>decimal</typeName>
+                </parameter>
+                <parameter>
+                    <colName>@TipoDocumento</colName>
+                    <colType>1</colType>
+                    <dataType>4</dataType>
+                    <typeName>int</typeName>
+                </parameter>
+                <parameter>
+                    <colName>@Opcion</colName>
+                    <colType>1</colType>
+                    <dataType>4</dataType>
+                    <typeName>int</typeName>
+                </parameter>
+            </parameterTypes>
+        </config>
+        <pd:inputBindings>
+            <inputs>
+                <inputSet>
+                    <NumeroDocumento>
+                        <xsl:value-of select="$Start/Parameters/DatosBasicosDigiturno_Rq/Identificacion/NumeroIdentificacion"/>
+                    </NumeroDocumento>
+                    <TipoDocumento>
+                        <xsl:value-of select="$Start/Parameters/DatosBasicosDigiturno_Rq/Identificacion/TipoIdentificacion"/>
+                    </TipoDocumento>
+                    <Opcion>
+                        <xsl:value-of select="$Start/Parameters/DatosBasicosDigiturno_Rq/Opcion"/>
+                    </Opcion>
+                </inputSet>
+                <timeout>
+                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/infoUsuario/DatosBasicos/ExternalService/JDBC/StoreProcedure/timeoutInSec"/>
+                </timeout>
+                <maxRows>
+                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/infoUsuario/DatosBasicos/ExternalService/JDBC/StoreProcedure/maxRows"/>
+                </maxRows>
+            </inputs>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>247</pd:x>
+        <pd:y>175</pd:y>
+        <config>
+            <faultName>ProcessErrors</faultName>
+        </config>
+        <pd:inputBindings>
+            <pfx2:ActivityInput>
+                <data>
+                    <xsl:choose>
+                        <xsl:when test="exists($_error_JDBC-Call-Procedure/ActivityErrors/ns2:JDBCTimedOutException)">
+                            <ExternalServiceException>
+                                <code>
+                                    <xsl:value-of select="'01'"/>
+                                </code>
+                                <description>
+                                    <xsl:value-of select="concat('TIMEOUT Store Procedure PA_VIN_PORT_CLI1 [', $_globalVariables/ns1:GlobalVariables/infoUsuario/DatosBasicos/ExternalService/JDBC/StoreProcedure/timeoutInSec, ' segundos]')"/>
+                                </description>
+                                <detail>
+                                    <xsl:value-of select="tib:render-xml($_error/ns3:ErrorReport)"/>
+                                </detail>
+                            </ExternalServiceException>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <ExternalServiceException>
+                                <code>
+                                    <xsl:value-of select="'02'"/>
+                                </code>
+                                <description>
+                                    <xsl:value-of select="concat('ERROR Store Procedure PA_VIN_PORT_CLI1 [', $_error/ns3:ErrorReport/Class, '; ', $_error/ns3:ErrorReport/Msg, ']')"/>
+                                </description>
+                                <detail>
+                                    <xsl:value-of select="tib:render-xml($_error/ns3:ErrorReport)"/>
+                                </detail>
+                            </ExternalServiceException>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </data>
+            </pfx2:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ParseXML ResultSet">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>473</pd:x>
+        <pd:y>55</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx3:Resultsets"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$JDBC-Call-Procedure/resultSet/UnresolvedResultsets"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>InputLog</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>InputLog</pd:from>
+        <pd:to>JDBC Call Procedure</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>OutputLog</pd:from>
+        <pd:to>ParseXML ResultSet</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JDBC Call Procedure</pd:from>
+        <pd:to>OutputLog</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JDBC Call Procedure</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-10092544</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ParseXML ResultSet</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

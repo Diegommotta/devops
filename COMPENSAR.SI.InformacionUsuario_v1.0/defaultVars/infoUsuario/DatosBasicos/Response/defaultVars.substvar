@@ -1,0 +1,61 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<repository xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xmlns = "http://www.tibco.com/xmlns/repo/types/2002">
+	<globalVariables>
+		<globalVariable>
+			<name>Encoding</name>
+			<value>UTF-8</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1554312873338</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>ErrCode</name>
+			<value>0</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1554398783978</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>ErrDesc</name>
+			<value>false - Nombre de parametros invalidos - ERROR</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1554404906612</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>OkCode</name>
+			<value>1</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1554315416030</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>OkDesc</name>
+			<value>true - Procesamiento exitoso - OK</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1554398783828</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>SinRegCode</name>
+			<value>1</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1554399554264</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>SinRegDesc</name>
+			<value>true - Sin registros - OK</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1554404906840</modTime>
+		</globalVariable>
+	</globalVariables>
+</repository>

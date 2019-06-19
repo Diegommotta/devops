@@ -1,0 +1,29 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<repository xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xmlns = "http://www.tibco.com/xmlns/repo/types/2002">
+	<globalVariables>
+		<globalVariable>
+			<name>maxRows</name>
+			<value>1</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1554323223544</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>procedureName</name>
+			<value>PA_VIN_PORT_CLI1</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1554323348845</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>timeoutInSec</name>
+			<value>20</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1554323223741</modTime>
+		</globalVariable>
+	</globalVariables>
+</repository>

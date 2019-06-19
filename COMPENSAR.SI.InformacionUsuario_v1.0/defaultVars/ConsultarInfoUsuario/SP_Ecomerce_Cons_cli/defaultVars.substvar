@@ -1,0 +1,37 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<repository xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" xmlns = "http://www.tibco.com/xmlns/repo/types/2002">
+	<globalVariables>
+		<globalVariable>
+			<name>FechaCalculo</name>
+			<value>10</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>Integer</type>
+			<modTime>1560396236259</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>SP_Ecomerce_Cons_cli</name>
+			<value>SP_Ecomerce_Cons_cli</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1560396235718</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>TimeoutSec_Default</name>
+			<value>180</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1560399025544</modTime>
+		</globalVariable>
+		<globalVariable>
+			<name>maxRows</name>
+			<value>1</value>
+			<deploymentSettable>true</deploymentSettable>
+			<serviceSettable>false</serviceSettable>
+			<type>String</type>
+			<modTime>1560396235988</modTime>
+		</globalVariable>
+	</globalVariables>
+</repository>

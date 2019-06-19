@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- edited with XMLSpy v2011 sp1 (http://www.altova.com) by End User (free.org) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 elementFormDefault="qualified"
+	 attributeFormDefault="unqualified">
+	<xs:element name="DatosBasicosDigiturno_Rq">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Identificacion" type="IdentificacionType"/>
+				<xs:element name="Opcion" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="DatosBasicosDigiturno_Rs">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="datosPersona" type="DatosPersonaType" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="DatosPersonaType">
+		<xs:sequence>
+			<xs:element name="Identificacion" type="IdentificacionType"/>
+			<xs:element name="ApellidoPrimero" type="xs:string"/>
+			<xs:element name="ApellidoSegundo" type="xs:string"/>
+			<xs:element name="NombrePrimero" type="xs:string"/>
+			<xs:element name="NombreSegundo" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="IdentificacionType">
+		<xs:sequence>
+			<xs:element name="TipoIdentificacion" type="TipoDocumentoType"/>
+			<xs:element name="NumeroIdentificacion" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="TipoDocumentoType">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:element name="Resultsets">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ResultSet1" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Record1" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="NumeroIdentificacionPrincipal" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="tipoIdentificacionPrincipal" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="programaAfiliacion" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="fechaInicio" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="fechaRetiro" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="categoriaAfiliacion" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="estadoAfiliacion" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="primerNombre" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="segundoNombreEmpRS" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="PrimerApellido" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="SegundoApellido" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="genero" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="fechaNacimiento" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="estadoCivil" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="correo" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="OptinCorreo" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="estadoCorreo" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="estadoCelular" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="celular" type="xs:string" nillable="true" minOccurs="0"/>
+										<xs:element name="OptinCelular" type="xs:string" nillable="true" minOccurs="0"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

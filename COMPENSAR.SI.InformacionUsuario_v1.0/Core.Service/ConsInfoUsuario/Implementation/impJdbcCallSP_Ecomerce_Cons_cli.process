@@ -1,0 +1,658 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pfx6="http://www.tibco.com/schemas/COMPENSAR.SI.ECommerce_v1.0/Core.ConsultaInfoUsuario/ConsInfoUsuario/Schema/Schema.xsd" xmlns:pfx7="http://www.tibco.com/ns/no_namespace_schema_location/Core.ConsultaInfoUsuario/ConsInfoUsuario/Schema/ConsultaInfoUsuario.xsd" xmlns:pfx8="http://www.tibco.com/ns/no_namespace_schema_location/Core.Service/ConsInfoUsuario/Schema/ConsultaInfoUsuario.xsd" xmlns:pfx="http://www.tibco.com/schemas/COMPENSAR.SI.CAF_v1.0/CommonConnections/JDBC/Schema.xsd" xmlns:pfx2="http://www.compensar.com/COMPENSAR.SI.CAF_v1.0/Afiliado_BD/1.0" xmlns:ns="http://www.compensar.com/middleware/commons/InsertLog/v1.0" xmlns:pfx3="http://WCompensar/CAF" xmlns:pfx4="http://tempuri.org/WCompensar/AF" xmlns:pfx5="http://www.tibco.com/pe/GenerateErrorActivity/InputSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns2="http://www.compensar.com/Commons/framework/Header/v1.0" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns1="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:ns4="http://www.tibco.com/pe/EngineTypes" xmlns:ns3="http://www.tibco.com/pe/DeployedVarsType" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns5="http://schemas.tibco.com/bw/plugins/jdbc/5.0/jdbcExceptions" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:pfx1="http://www.compensar.com.co/Commons/framework/BusMessage/v1.0">
+    <xsd:import namespace="http://www.tibco.com/schemas/COMPENSAR.SI.CAF_v1.0/CommonConnections/JDBC/Schema.xsd"/>
+    <xsd:import namespace="http://www.compensar.com/COMPENSAR.SI.CAF_v1.0/Afiliado_BD/1.0" schemaLocation="/Core.CAFServices/Afiliado/Schema/Afiliado_BD.xsd"/>
+    <xsd:import namespace="http://WCompensar/CAF" schemaLocation="/CommonSchemas/ExternalService/ContratoNetCAF.wsdl"/>
+    <xsd:import namespace="http://tempuri.org/WCompensar/AF" schemaLocation="/CommonSchemas/ExternalServices/ContratoNetAldeaAf.wsdl"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/Core.ConsultaInfoUsuario/ConsInfoUsuario/Schema/ConsultaInfoUsuario.xsd" schemaLocation="/Core.ConsultaInfoUsuario/ConsInfoUsuario/Schema/ConsultaInfoUsuario.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/Core.Service/ConsInfoUsuario/Schema/ConsultaInfoUsuario.xsd" schemaLocation="/Core.Service/ConsInfoUsuario/Schema/ConsultaInfoUsuario.xsd"/>
+    <pd:name>Core.Service/ConsInfoUsuario/Implementation/impJdbcCallSP_Ecomerce_Cons_cli.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Parameters">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="Logging">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="TrxID" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="ESBTrxID" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="ServiceName" type="xsd:string"/>
+                                <xsd:element name="OperationName" type="xsd:string"/>
+                                <xsd:element name="ApplicationID" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="OperationInvokerName" type="xsd:string" minOccurs="0"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element ref="pfx8:ConsultarInfoUsuario_Rq"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>49</pd:startX>
+    <pd:startY>55</pd:startY>
+    <pd:returnBindings>
+        <Return>
+            <xsl:variable name="isResultSet1" select="$ParseXML-ResultSet/Resultsets/ResultSet1/Record1[1]"/>
+            <xsl:variable name="isResultSet2" select="$ParseXML-ResultSet/Resultsets/ResultSet2/Record2[1]"/>
+            <xsl:variable name="isResultSet3" select="$ParseXML-ResultSet/Resultsets/ResultSet3/Record3[1]"/>
+            <ConsultarInfoUsuario_Rs>
+                <xsl:choose>
+                    <xsl:when test="exists($ParseXML-ResultSet/Resultsets/ResultSet1/Record1)">
+                        <Usuario>
+                            <Identificacion>
+                                <xsl:if test="$isResultSet1/TIDECLI">
+                                    <Tipo>
+                                        <xsl:value-of select="$isResultSet1/TIDECLI"/>
+                                    </Tipo>
+                                </xsl:if>
+                                <xsl:if test="$isResultSet1/NIDECLI">
+                                    <Numero>
+                                        <xsl:value-of select="$isResultSet1/NIDECLI"/>
+                                    </Numero>
+                                </xsl:if>
+                            </Identificacion>
+                            <xsl:if test="$isResultSet1/XPRIAPE">
+                                <PrimerApellido>
+                                    <xsl:value-of select="$isResultSet1/XPRIAPE"/>
+                                </PrimerApellido>
+                            </xsl:if>
+                            <xsl:if test="not(($isResultSet1/XSEGAPE/@xsi:nil=(&quot;true&quot;)) or ($isResultSet1/XSEGAPE/@xsi:nil=(&quot;1&quot;)))">
+                                <SegundoApellido>
+                                    <xsl:value-of select="$isResultSet1/XSEGAPE"/>
+                                </SegundoApellido>
+                            </xsl:if>
+                            <xsl:if test="$isResultSet1/XNOMCLI">
+                                <PrimerNombre>
+                                    <xsl:value-of select="$isResultSet1/XNOMCLI"/>
+                                </PrimerNombre>
+                            </xsl:if>
+                            <xsl:if test="not(($isResultSet1/XRAZSEG/@xsi:nil=(&quot;true&quot;)) or ($isResultSet1/XRAZSEG/@xsi:nil=(&quot;1&quot;)))">
+                                <SegundoNombre>
+                                    <xsl:value-of select="$isResultSet1/XRAZSEG"/>
+                                </SegundoNombre>
+                            </xsl:if>
+                            <FechaNacimiento>
+                                <xsl:value-of select="tib:format-date('yyyy/MM/dd',tib:parse-date('yyyyMMdd', $isResultSet1/FNACCLI) )"/>
+                            </FechaNacimiento>
+                            <Genero>
+                                <xsl:if test="$isResultSet1/XGENCLI">
+                                    <Valor>
+                                        <xsl:value-of select="$isResultSet1/XGENCLI"/>
+                                    </Valor>
+                                </xsl:if>
+                            </Genero>
+                            <EstadoCivil>
+                                <xsl:if test="$isResultSet1/XECICLI">
+                                    <Valor>
+                                        <xsl:value-of select="$isResultSet1/XECICLI"/>
+                                    </Valor>
+                                </xsl:if>
+                            </EstadoCivil>
+                            <xsl:if test="not(($isResultSet1/DAPTER/@xsi:nil=(&quot;true&quot;)) or ($isResultSet1/DAPTER/@xsi:nil=(&quot;1&quot;)))">
+                                <Marcacion>
+                                    <xsl:value-of select="$isResultSet1/DAPTER"/>
+                                </Marcacion>
+                            </xsl:if>
+                            <xsl:choose>
+                                <xsl:when test="$isResultSet1/OPTIN_CORELE = 'true'">
+                                    <OptinCORELE>
+                                        <xsl:value-of select="1"/>
+                                    </OptinCORELE>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <OptinCORELE>
+                                        <xsl:value-of select="0"/>
+                                    </OptinCORELE>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:choose>
+                                <xsl:when test="$isResultSet1/OPTIN_TELCEL = 'true'">
+                                    <OptinTELCEL>
+                                        <xsl:value-of select="1"/>
+                                    </OptinTELCEL>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <OptinTELCEL>
+                                        <xsl:value-of select="0"/>
+                                    </OptinTELCEL>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:if test="not(($isResultSet1/CORELE/@xsi:nil=(&quot;true&quot;)) or ($isResultSet1/CORELE/@xsi:nil=(&quot;1&quot;)))">
+                                <CorreoElectronico>
+                                    <xsl:value-of select="$isResultSet1/CORELE"/>
+                                </CorreoElectronico>
+                            </xsl:if>
+                            <xsl:if test="not(($isResultSet1/TELCEL/@xsi:nil=(&quot;true&quot;)) or ($isResultSet1/TELCEL/@xsi:nil=(&quot;1&quot;)))">
+                                <TelefonoMovil>
+                                    <xsl:value-of select="$isResultSet1/TELCEL"/>
+                                </TelefonoMovil>
+                            </xsl:if>
+                            <xsl:if test="not(($isResultSet1/NTELCLI/@xsi:nil=(&quot;true&quot;)) or ($isResultSet1/NTELCLI/@xsi:nil=(&quot;1&quot;)))">
+                                <TelefonoFijo>
+                                    <xsl:value-of select="$isResultSet1/NTELCLI"/>
+                                </TelefonoFijo>
+                            </xsl:if>
+                            <xsl:if test="not(($isResultSet1/XDIR/@xsi:nil=(&quot;true&quot;)) or ($isResultSet1/XDIR/@xsi:nil=(&quot;1&quot;)))">
+                                <Direccion>
+                                    <xsl:value-of select="$isResultSet1/XDIR"/>
+                                </Direccion>
+                            </xsl:if>
+                            <xsl:if test="not(($isResultSet1/DIRGEOREF/@xsi:nil=(&quot;true&quot;)) or ($isResultSet1/DIRGEOREF/@xsi:nil=(&quot;1&quot;)))">
+                                <DirGeorreferenciada>
+                                    <xsl:value-of select="$isResultSet1/DIRGEOREF"/>
+                                </DirGeorreferenciada>
+                            </xsl:if>
+                            <xsl:if test="not(($isResultSet1/XCIU/@xsi:nil=(&quot;true&quot;)) or ($isResultSet1/XCIU/@xsi:nil=(&quot;1&quot;)))">
+                                <Ciudad>
+                                    <xsl:value-of select="$isResultSet1/XCIU"/>
+                                </Ciudad>
+                            </xsl:if>
+                            <xsl:if test="not(($isResultSet1/DEPARTAMENTO/@xsi:nil=(&quot;true&quot;)) or ($isResultSet1/DEPARTAMENTO/@xsi:nil=(&quot;1&quot;)))">
+                                <Departamento>
+                                    <xsl:value-of select="$isResultSet1/DEPARTAMENTO"/>
+                                </Departamento>
+                            </xsl:if>
+                            <xsl:if test="not(($isResultSet1/CATEGORIA/@xsi:nil=(&quot;true&quot;)) or ($isResultSet1/CATEGORIA/@xsi:nil=(&quot;1&quot;)))">
+                                <Categoria>
+                                    <xsl:value-of select="$isResultSet1/CATEGORIA"/>
+                                </Categoria>
+                            </xsl:if>
+                            <xsl:if test="$isResultSet1/NAUTCLI">
+                                <Nautcli>
+                                    <xsl:value-of select="$isResultSet1/NAUTCLI"/>
+                                </Nautcli>
+                            </xsl:if>
+                            <xsl:if test="not(($isResultSet1/DISCAP/@xsi:nil=(&quot;true&quot;)) or ($isResultSet1/DISCAP/@xsi:nil=(&quot;1&quot;)))">
+                                <Discapacidad>
+                                    <xsl:value-of select="$isResultSet1/DISCAP"/>
+                                </Discapacidad>
+                            </xsl:if>
+                            <xsl:if test="$isResultSet1/EDAD">
+                                <Edad>
+                                    <xsl:value-of select="$isResultSet1/EDAD"/>
+                                </Edad>
+                            </xsl:if>
+                            <xsl:choose>
+                                <xsl:when test="exists($ParseXML-ResultSet/Resultsets/ResultSet2/Record2)">
+                                    <Vinculaciones>
+                                        <xsl:if test="$isResultSet2/NAUTCLI">
+                                            <NAUTCLI>
+                                                <xsl:value-of select="$isResultSet2/NAUTCLI"/>
+                                            </NAUTCLI>
+                                        </xsl:if>
+                                        <EstadoVinculacion>
+                                            <xsl:if test="not(($isResultSet2/CESTVIN/@xsi:nil=(&quot;true&quot;)) or ($isResultSet2/CESTVIN/@xsi:nil=(&quot;1&quot;)))">
+                                                <Valor>
+                                                    <xsl:value-of select="$isResultSet2/CESTVIN"/>
+                                                </Valor>
+                                            </xsl:if>
+                                        </EstadoVinculacion>
+                                        <xsl:if test="not(($isResultSet2/CPRGSRV/@xsi:nil=(&quot;true&quot;)) or ($isResultSet2/CPRGSRV/@xsi:nil=(&quot;1&quot;)))">
+                                            <CodigoVinculacion>
+                                                <xsl:value-of select="$isResultSet2/CPRGSRV"/>
+                                            </CodigoVinculacion>
+                                        </xsl:if>
+                                        <IdentificiacionEmpresa>
+                                            <xsl:if test="$isResultSet2/TIDECLI_EMPRESA">
+                                                <Valor>
+                                                    <xsl:value-of select="$isResultSet2/TIDECLI_EMPRESA"/>
+                                                </Valor>
+                                            </xsl:if>
+                                            <xsl:if test="$isResultSet2/NIDECLI_EMPRESA">
+                                                <Numero>
+                                                    <xsl:value-of select="$isResultSet2/NIDECLI_EMPRESA"/>
+                                                </Numero>
+                                            </xsl:if>
+                                        </IdentificiacionEmpresa>
+                                        <xsl:if test="not(($isResultSet2/XVIN/@xsi:nil=(&quot;true&quot;)) or ($isResultSet2/XVIN/@xsi:nil=(&quot;1&quot;)))">
+                                            <Cargo>
+                                                <xsl:value-of select="$isResultSet2/XVIN"/>
+                                            </Cargo>
+                                        </xsl:if>
+                                        <xsl:if test="not(($isResultSet2/SERV_DOMESTICO/@xsi:nil=(&quot;true&quot;)) or ($isResultSet2/SERV_DOMESTICO/@xsi:nil=(&quot;1&quot;)))">
+                                            <EmpleadoServicioDomestico>
+                                                <xsl:value-of select="$isResultSet2/SERV_DOMESTICO"/>
+                                            </EmpleadoServicioDomestico>
+                                        </xsl:if>
+                                    </Vinculaciones>
+                                </xsl:when>
+                                <xsl:otherwise/>
+                            </xsl:choose>
+                            <xsl:choose>
+                                <xsl:when test="exists($ParseXML-ResultSet/Resultsets/ResultSet3/Record3)">
+                                    <Beneficiario>
+                                        <xsl:if test="$isResultSet3/NAUTCLI_TRABAJADOR">
+                                            <NAUTCLITrabajador>
+                                                <xsl:value-of select="$isResultSet3/NAUTCLI_TRABAJADOR"/>
+                                            </NAUTCLITrabajador>
+                                        </xsl:if>
+                                        <xsl:if test="$isResultSet3/NAUTCLI_BENEFICIARIO">
+                                            <NAUTCLIBeneficiario>
+                                                <xsl:value-of select="$isResultSet3/NAUTCLI_BENEFICIARIO"/>
+                                            </NAUTCLIBeneficiario>
+                                        </xsl:if>
+                                        <Identificacion>
+                                            <xsl:if test="$isResultSet3/TIDECLI">
+                                                <Tipo>
+                                                    <xsl:value-of select="$isResultSet3/TIDECLI"/>
+                                                </Tipo>
+                                            </xsl:if>
+                                            <xsl:if test="$isResultSet3/NIDECLI">
+                                                <Numero>
+                                                    <xsl:value-of select="$isResultSet3/NIDECLI"/>
+                                                </Numero>
+                                            </xsl:if>
+                                        </Identificacion>
+                                        <xsl:if test="$isResultSet3/XPRIAPE">
+                                            <PrimerApellido>
+                                                <xsl:value-of select="$isResultSet3/XPRIAPE"/>
+                                            </PrimerApellido>
+                                        </xsl:if>
+                                        <xsl:if test="not(($isResultSet3/XSEGAPE/@xsi:nil=(&quot;true&quot;)) or ($isResultSet3/XSEGAPE/@xsi:nil=(&quot;1&quot;)))">
+                                            <SegundoApellido>
+                                                <xsl:value-of select="$isResultSet3/XSEGAPE"/>
+                                            </SegundoApellido>
+                                        </xsl:if>
+                                        <xsl:if test="$isResultSet3/XNOMCLI">
+                                            <PrimerNombre>
+                                                <xsl:value-of select="$isResultSet3/XNOMCLI"/>
+                                            </PrimerNombre>
+                                        </xsl:if>
+                                        <xsl:if test="not(($isResultSet3/XRAZSEG/@xsi:nil=(&quot;true&quot;)) or ($isResultSet3/XRAZSEG/@xsi:nil=(&quot;1&quot;)))">
+                                            <SegundoNombre>
+                                                <xsl:value-of select="$isResultSet3/XRAZSEG"/>
+                                            </SegundoNombre>
+                                        </xsl:if>
+                                        <FechaNacimiento>
+                                            <xsl:value-of select="tib:format-date('yyyy/MM/dd',tib:parse-date('yyyyMMdd', $isResultSet3/FNACCLI) )"/>
+                                        </FechaNacimiento>
+                                        <Genero>
+                                            <xsl:if test="$isResultSet3/XGENCLI">
+                                                <Valor>
+                                                    <xsl:value-of select="$isResultSet3/XGENCLI"/>
+                                                </Valor>
+                                            </xsl:if>
+                                        </Genero>
+                                        <EstadoCivil>
+                                            <xsl:if test="$isResultSet3/XECICLI">
+                                                <Valor>
+                                                    <xsl:value-of select="$isResultSet3/XECICLI"/>
+                                                </Valor>
+                                            </xsl:if>
+                                        </EstadoCivil>
+                                        <xsl:if test="not(($isResultSet3/DAPTER/@xsi:nil=(&quot;true&quot;)) or ($isResultSet3/DAPTER/@xsi:nil=(&quot;1&quot;)))">
+                                            <Marcacion>
+                                                <xsl:value-of select="$isResultSet3/DAPTER"/>
+                                            </Marcacion>
+                                        </xsl:if>
+                                        <xsl:choose>
+                                            <xsl:when test="$isResultSet3/OPTIN_CORELE = 'true'">
+                                                <OptionCORELE>
+                                                    <xsl:value-of select="1"/>
+                                                </OptionCORELE>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <OptionCORELE>
+                                                    <xsl:value-of select="0"/>
+                                                </OptionCORELE>
+                                            </xsl:otherwise>
+                                        </xsl:choose>
+                                        <xsl:choose>
+                                            <xsl:when test="$isResultSet3/OPTIN_TELCEL = 'true'">
+                                                <OptinTELCEL>
+                                                    <xsl:value-of select="1"/>
+                                                </OptinTELCEL>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <OptinTELCEL>
+                                                    <xsl:value-of select="0"/>
+                                                </OptinTELCEL>
+                                            </xsl:otherwise>
+                                        </xsl:choose>
+                                        <xsl:if test="not(($isResultSet3/CORELE/@xsi:nil=(&quot;true&quot;)) or ($isResultSet3/CORELE/@xsi:nil=(&quot;1&quot;)))">
+                                            <CorreoElectronico>
+                                                <xsl:value-of select="$isResultSet3/CORELE"/>
+                                            </CorreoElectronico>
+                                        </xsl:if>
+                                        <xsl:if test="not(($isResultSet3/TELCEL/@xsi:nil=(&quot;true&quot;)) or ($isResultSet3/TELCEL/@xsi:nil=(&quot;1&quot;)))">
+                                            <TelefonoMovil>
+                                                <xsl:value-of select="$isResultSet3/TELCEL"/>
+                                            </TelefonoMovil>
+                                        </xsl:if>
+                                        <xsl:if test="not(($isResultSet3/NTELCLI/@xsi:nil=(&quot;true&quot;)) or ($isResultSet3/NTELCLI/@xsi:nil=(&quot;1&quot;)))">
+                                            <TelefonoFijo>
+                                                <xsl:value-of select="$isResultSet3/NTELCLI"/>
+                                            </TelefonoFijo>
+                                        </xsl:if>
+                                        <xsl:if test="not(($isResultSet3/XDIR/@xsi:nil=(&quot;true&quot;)) or ($isResultSet3/XDIR/@xsi:nil=(&quot;1&quot;)))">
+                                            <Direccion>
+                                                <xsl:value-of select="$isResultSet3/XDIR"/>
+                                            </Direccion>
+                                        </xsl:if>
+                                        <xsl:if test="not(($isResultSet3/DIRGEOREF/@xsi:nil=(&quot;true&quot;)) or ($isResultSet3/DIRGEOREF/@xsi:nil=(&quot;1&quot;)))">
+                                            <DirGeorreferencia>
+                                                <xsl:value-of select="$isResultSet3/DIRGEOREF"/>
+                                            </DirGeorreferencia>
+                                        </xsl:if>
+                                        <xsl:if test="not(($isResultSet3/XCIU/@xsi:nil=(&quot;true&quot;)) or ($isResultSet3/XCIU/@xsi:nil=(&quot;1&quot;)))">
+                                            <Ciudad>
+                                                <xsl:value-of select="$isResultSet3/XCIU"/>
+                                            </Ciudad>
+                                        </xsl:if>
+                                        <xsl:if test="not(($isResultSet3/DEPARTAMENTO/@xsi:nil=(&quot;true&quot;)) or ($isResultSet3/DEPARTAMENTO/@xsi:nil=(&quot;1&quot;)))">
+                                            <Departamento>
+                                                <xsl:value-of select="$isResultSet3/DEPARTAMENTO"/>
+                                            </Departamento>
+                                        </xsl:if>
+                                        <xsl:if test="not(($isResultSet3/CATEGORIA/@xsi:nil=(&quot;true&quot;)) or ($isResultSet3/CATEGORIA/@xsi:nil=(&quot;1&quot;)))">
+                                            <Categoria>
+                                                <xsl:value-of select="$isResultSet3/CATEGORIA"/>
+                                            </Categoria>
+                                        </xsl:if>
+                                        <xsl:if test="$isResultSet3/EDAD">
+                                            <Edad>
+                                                <xsl:value-of select="$isResultSet3/EDAD"/>
+                                            </Edad>
+                                        </xsl:if>
+                                        <Discapacidad>
+                                            <xsl:value-of select="$isResultSet3/DISCAP"/>
+                                        </Discapacidad>
+                                        <CodigoVinculacion>
+                                            <xsl:value-of select="round($isResultSet3/CPRGSRV)"/>
+                                        </CodigoVinculacion>
+                                        <Parentesco>
+                                            <xsl:if test="not(($isResultSet3/CPRN/@xsi:nil=(&quot;true&quot;)) or ($isResultSet3/CPRN/@xsi:nil=(&quot;1&quot;)))">
+                                                <Valor>
+                                                    <xsl:value-of select="$isResultSet3/CPRN"/>
+                                                </Valor>
+                                            </xsl:if>
+                                        </Parentesco>
+                                    </Beneficiario>
+                                </xsl:when>
+                                <xsl:otherwise/>
+                            </xsl:choose>
+                        </Usuario>
+                    </xsl:when>
+                    <xsl:otherwise/>
+                </xsl:choose>
+            </ConsultarInfoUsuario_Rs>
+        </Return>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="Return">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx8:ConsultarInfoUsuario_Rs" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>607</pd:endX>
+    <pd:endY>55</pd:endY>
+    <pd:errorSchemas>
+        <ProccesErrors>
+            <xsd:element name="ExternalServiceException">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="code" type="xsd:string"/>
+                        <xsd:element name="description" type="xsd:string"/>
+                        <xsd:element name="detail" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </ProccesErrors>
+    </pd:errorSchemas>
+    <pd:processVariables/>
+    <pd:targetNamespace>http://xmlns.example.com/1530823701735</pd:targetNamespace>
+    <pd:activity name="InputLog">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>149</pd:x>
+        <pd:y>55</pd:y>
+        <config>
+            <processName>/Logging/Services/InsertLog.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:Logs>
+                <ns:TrxID>
+                    <xsl:value-of select="$Start/Parameters/Logging/TrxID"/>
+                </ns:TrxID>
+                <ns:ESBTransactionIdentifier>
+                    <xsl:value-of select="$Start/Parameters/Logging/ESBTrxID"/>
+                </ns:ESBTransactionIdentifier>
+                <ns:ServiceName>
+                    <xsl:value-of select="$Start/Parameters/Logging/ServiceName"/>
+                </ns:ServiceName>
+                <ns:OperationName>
+                    <xsl:value-of select="$Start/Parameters/Logging/OperationName"/>
+                </ns:OperationName>
+                <ns:AplicationID>
+                    <xsl:value-of select="$Start/Parameters/Logging/ApplicationID"/>
+                </ns:AplicationID>
+                <ns:CompID>
+                    <xsl:value-of select="$_globalVariables/ns3:GlobalVariables/Logging/Application/ComponentID"/>
+                </ns:CompID>
+                <ns:TimeStp>
+                    <xsl:value-of select="current-dateTime()"/>
+                </ns:TimeStp>
+                <ns:Desc>
+                    <xsl:value-of select="'Inicia llamado SP_EComerce_Cons_cli'"/>
+                </ns:Desc>
+                <ns:Msg>
+                    <xsl:value-of select="tib:render-xml($Start/Parameters)"/>
+                </ns:Msg>
+                <ns:LogLevel>
+                    <xsl:value-of select="$_globalVariables/ns3:GlobalVariables/Logging/LogLevel/LogLevel"/>
+                </ns:LogLevel>
+                <ns:OperationInvokerName>
+                    <xsl:value-of select="$Start/Parameters/Logging/OperationInvokerName"/>
+                </ns:OperationInvokerName>
+            </ns:Logs>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="OutputLog">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>384</pd:x>
+        <pd:y>55</pd:y>
+        <config>
+            <processName>/Logging/Services/InsertLog.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:Logs>
+                <ns:TrxID>
+                    <xsl:value-of select="$Start/Parameters/Logging/TrxID"/>
+                </ns:TrxID>
+                <ns:ESBTransactionIdentifier>
+                    <xsl:value-of select="$Start/Parameters/Logging/ESBTrxID"/>
+                </ns:ESBTransactionIdentifier>
+                <ns:ServiceName>
+                    <xsl:value-of select="$Start/Parameters/Logging/ServiceName"/>
+                </ns:ServiceName>
+                <ns:OperationName>
+                    <xsl:value-of select="$Start/Parameters/Logging/OperationName"/>
+                </ns:OperationName>
+                <ns:AplicationID>
+                    <xsl:value-of select="$Start/Parameters/Logging/ApplicationID"/>
+                </ns:AplicationID>
+                <ns:CompID>
+                    <xsl:value-of select="$_globalVariables/ns3:GlobalVariables/Logging/Application/ComponentID"/>
+                </ns:CompID>
+                <ns:TimeStp>
+                    <xsl:value-of select="current-dateTime()"/>
+                </ns:TimeStp>
+                <ns:Desc>
+                    <xsl:value-of select="'Finaliza llamado SP_EComerce_Cons_cli'"/>
+                </ns:Desc>
+                <ns:Msg>
+                    <xsl:value-of select="tib:render-xml($JDBC-Call-Procedure/resultSet)"/>
+                </ns:Msg>
+                <ns:LogLevel>
+                    <xsl:value-of select="$_globalVariables/ns3:GlobalVariables/Logging/LogLevel/LogLevel"/>
+                </ns:LogLevel>
+                <ns:OperationInvokerName>
+                    <xsl:value-of select="$Start/Parameters/Logging/OperationInvokerName"/>
+                </ns:OperationInvokerName>
+            </ns:Logs>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="JDBC Call Procedure">
+        <pd:type>com.tibco.plugin.jdbc.JDBCCallActivity</pd:type>
+        <pd:resourceType>ae.activities.JDBCCallActivity</pd:resourceType>
+        <pd:x>265</pd:x>
+        <pd:y>63</pd:y>
+        <config>
+            <timeout>10</timeout>
+            <maxRows>100</maxRows>
+            <emptyStrAsNil>false</emptyStrAsNil>
+            <jdbcSharedConfig>/Core.Service/ConsInfoUsuario/Connections/DBCLIENTEConn.sharedjdbc</jdbcSharedConfig>
+            <schema/>
+            <catalog/>
+            <ProcedureName>SP_Ecomerce_Cons_cli;1</ProcedureName>
+            <useSchema>false</useSchema>
+            <parameterTypes>
+                <parameter>
+                    <colName>@RETURN_VALUE</colName>
+                    <colType>5</colType>
+                    <dataType>4</dataType>
+                    <typeName>int</typeName>
+                </parameter>
+                <parameter>
+                    <colName>@tipoId</colName>
+                    <colType>1</colType>
+                    <dataType>4</dataType>
+                    <typeName>int</typeName>
+                </parameter>
+                <parameter>
+                    <colName>@numId</colName>
+                    <colType>1</colType>
+                    <dataType>12</dataType>
+                    <typeName>varchar</typeName>
+                </parameter>
+            </parameterTypes>
+        </config>
+        <pd:inputBindings>
+            <inputs>
+                <inputSet>
+                    <tipoId>
+                        <xsl:value-of select="$Start/Parameters/ConsultarInfoUsuario_Rq/Identificacion/TipoIdentificacion"/>
+                    </tipoId>
+                    <numId>
+                        <xsl:value-of select="$Start/Parameters/ConsultarInfoUsuario_Rq/Identificacion/NumeroIdentificacion"/>
+                    </numId>
+                </inputSet>
+                <timeout>
+                    <xsl:value-of select="$_globalVariables/ns3:GlobalVariables/ConsultarInfoUsuario/SP_Ecomerce_Cons_cli/TimeoutSec_Default"/>
+                </timeout>
+                <maxRows>
+                    <xsl:value-of select="$_globalVariables/ns3:GlobalVariables/ConsultarInfoUsuario/SP_Ecomerce_Cons_cli/maxRows"/>
+                </maxRows>
+            </inputs>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="ParseXML ResultSet">
+        <pd:type>com.tibco.plugin.xml.XMLParseActivity</pd:type>
+        <pd:resourceType>ae.activities.XMLParseActivity</pd:resourceType>
+        <pd:x>506</pd:x>
+        <pd:y>55</pd:y>
+        <config>
+            <inputStyle>text</inputStyle>
+            <xsdVersion>default</xsdVersion>
+            <validateOutput>true</validateOutput>
+            <term ref="pfx8:Resultsets"/>
+        </config>
+        <pd:inputBindings>
+            <xmlString>
+                <xsl:value-of select="$JDBC-Call-Procedure/resultSet/UnresolvedResultsets"/>
+            </xmlString>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Generate Error">
+        <pd:type>com.tibco.pe.core.GenerateErrorActivity</pd:type>
+        <pd:resourceType>ae.activities.throw</pd:resourceType>
+        <pd:x>267</pd:x>
+        <pd:y>175</pd:y>
+        <config>
+            <faultName>ProccesErrors</faultName>
+        </config>
+        <pd:inputBindings>
+            <pfx5:ActivityInput>
+                <data>
+                    <xsl:choose>
+                        <xsl:when test="exists($_error_JDBC-Call-Procedure/ActivityErrors/ns5:JDBCTimedOutException)">
+                            <ExternalServiceException>
+                                <code>
+                                    <xsl:value-of select="$_globalVariables/ns3:GlobalVariables/ConsultarInfoUsuario/Response/Timeout/ErrCode"/>
+                                </code>
+                                <description>
+                                    <xsl:value-of select="concat($_globalVariables/ns3:GlobalVariables/ConsultarInfoUsuario/Response/Timeout/ErrDesc,$_globalVariables/ns3:GlobalVariables/ConsultarInfoUsuario/SP_Ecomerce_Cons_cli/TimeoutSec_Default, ' segundos')"/>
+                                </description>
+                                <detail>
+                                    <xsl:value-of select="tib:render-xml($_error/ns4:ErrorReport)"/>
+                                </detail>
+                            </ExternalServiceException>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <ExternalServiceException>
+                                <code>
+                                    <xsl:value-of select="$_globalVariables/ns3:GlobalVariables/ConsultarInfoUsuario/Response/UnExpectedError/ErrCode"/>
+                                </code>
+                                <description>
+                                    <xsl:value-of select="concat($_globalVariables/ns3:GlobalVariables/ConsultarInfoUsuario/Response/UnExpectedError ,'ERROR Store Procedure SP_Ecomerce_Cons_cli [', $_error/ns4:ErrorReport/Class, '; ', $_error/ns4:ErrorReport/Msg, ']')"/>
+                                </description>
+                                <detail>
+                                    <xsl:value-of select="tib:render-xml($_error/ns4:ErrorReport)"/>
+                                </detail>
+                            </ExternalServiceException>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </data>
+            </pfx5:ActivityInput>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>InputLog</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>InputLog</pd:from>
+        <pd:to>JDBC Call Procedure</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JDBC Call Procedure</pd:from>
+        <pd:to>Generate Error</pd:to>
+        <pd:xpathDescription>Error</pd:xpathDescription>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-10092544</pd:lineColor>
+        <pd:conditionType>error</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>JDBC Call Procedure</pd:from>
+        <pd:to>OutputLog</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>OutputLog</pd:from>
+        <pd:to>ParseXML ResultSet</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>ParseXML ResultSet</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>Default</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>

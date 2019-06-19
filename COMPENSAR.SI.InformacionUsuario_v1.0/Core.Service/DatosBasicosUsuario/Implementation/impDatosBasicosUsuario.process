@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pd:ProcessDefinition xmlns:pfx="http://www.compensar.com/services/commons/ServiceManager" xmlns:pfx2="http://www.tibco.com/ns/no_namespace_schema_location/Core.Service/DatosBasicosUsuario/Schema/InfoUsu_DatosBasicosUsuario_NN.xsd" xmlns:ns="http://www.compensar.com/middleware/commons/InsertLog/v1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns2="http://www.tibco.com/namespaces/tnt/plugins/jms" xmlns:tib="http://www.tibco.com/bw/xslt/custom-functions" xmlns:ns1="http://www.tibco.com/pe/DeployedVarsType" xmlns:ns4="http://www.tibco.com/pe/EngineTypes" xmlns:ns3="http://www.compensar.com/Commons/framework/Header/v1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:ns5="http://www.compensar.com.co/Commons/framework/Error/v1.0" xmlns:pd="http://xmlns.tibco.com/bw/process/2003" xmlns:pfx1="http://www.compensar.com.co/Commons/framework/BusMessage/v1.0">
+    <xsd:import namespace="http://www.compensar.com/services/commons/ServiceManager" schemaLocation="/Core.Service/DatosBasicosUsuario/Schema/ServiceManager.xsd"/>
+    <xsd:import namespace="http://www.tibco.com/ns/no_namespace_schema_location/Core.Service/DatosBasicosUsuario/Schema/InfoUsu_DatosBasicosUsuario_NN.xsd" schemaLocation="/Core.Service/DatosBasicosUsuario/Schema/InfoUsu_DatosBasicosUsuario_NN.xsd"/>
+    <pd:name>Core.Service/DatosBasicosUsuario/Implementation/impDatosBasicosUsuario.process</pd:name>
+    <pd:startName>Start</pd:startName>
+    <pd:startType>
+        <xsd:element name="Parameters">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element name="RequestDateTime" type="xsd:dateTime"/>
+                    <xsd:element name="Logging">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="TrxID" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="ESBTrxID" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="ServiceName" type="xsd:string"/>
+                                <xsd:element name="OperationName" type="xsd:string"/>
+                                <xsd:element name="ApplicationID" type="xsd:string" minOccurs="0"/>
+                                <xsd:element name="OperationInvokerName" type="xsd:string" minOccurs="0"/>
+                            </xsd:sequence>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element ref="pfx:ServiceRequest"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:startType>
+    <pd:startX>49</pd:startX>
+    <pd:startY>55</pd:startY>
+    <pd:returnBindings>
+        <Return>
+            <xsl:copy-of select="$prvarResponse/pfx:ServiceResponse"/>
+        </Return>
+    </pd:returnBindings>
+    <pd:endName>End</pd:endName>
+    <pd:endType>
+        <xsd:element name="Return">
+            <xsd:complexType>
+                <xsd:sequence>
+                    <xsd:element ref="pfx:ServiceResponse"/>
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:element>
+    </pd:endType>
+    <pd:endX>647</pd:endX>
+    <pd:endY>55</pd:endY>
+    <pd:errorSchemas/>
+    <pd:processVariables>
+        <prvarResponse ref="pfx:ServiceResponse"/>
+    </pd:processVariables>
+    <pd:targetNamespace>http://xmlns.example.com/1554312319519</pd:targetNamespace>
+    <pd:activity name="impJdbcCall PA_VIN_PORT_CLI1">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>301</pd:x>
+        <pd:y>63</pd:y>
+        <config>
+            <processName>/Core.Service/DatosBasicosUsuario/Implementation/impJdbcCallPA_VIN_PORT_CLI1.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Parameters>
+                <xsl:copy-of select="$Start/Parameters/Logging"/>
+                <xsl:copy-of select="$MapRequest/root/DatosBasicosDigiturno_Rq"/>
+            </Parameters>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="logicBuild Response">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>423</pd:x>
+        <pd:y>63</pd:y>
+        <config>
+            <processName>/Core.Service/DatosBasicosUsuario/Implementation/logicBuildResponse.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Parameters>
+                <xsl:copy-of select="$Start/Parameters/Logging"/>
+                <xsl:copy-of select="$impJdbcCall-PA_VIN_PORT_CLI1/Return/DatosBasicosDigiturno_Rs"/>
+            </Parameters>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="MapRequest">
+        <pd:type>com.tibco.plugin.mapper.MapperActivity</pd:type>
+        <pd:resourceType>ae.activities.MapperActivity</pd:resourceType>
+        <pd:x>170</pd:x>
+        <pd:y>55</pd:y>
+        <config>
+            <element>
+                <xsd:element name="root">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element ref="pfx2:DatosBasicosDigiturno_Rq"/>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </element>
+        </config>
+        <pd:inputBindings>
+            <root>
+                <DatosBasicosDigiturno_Rq>
+                    <Identificacion>
+                        <TipoIdentificacion>
+                            <xsl:value-of select="$Start/Parameters/pfx:ServiceRequest/pfx:RequestBody/pfx:Parameters/pfx:Parameter[@Key=$_globalVariables/ns1:GlobalVariables/infoUsuario/DatosBasicos/Request/TipoId]"/>
+                        </TipoIdentificacion>
+                        <NumeroIdentificacion>
+                            <xsl:value-of select="$Start/Parameters/pfx:ServiceRequest/pfx:RequestBody/pfx:Parameters/pfx:Parameter[@Key=$_globalVariables/ns1:GlobalVariables/infoUsuario/DatosBasicos/Request/NumId]"/>
+                        </NumeroIdentificacion>
+                    </Identificacion>
+                    <Opcion>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/infoUsuario/DatosBasicos/Request/Opcion"/>
+                    </Opcion>
+                </DatosBasicosDigiturno_Rq>
+            </root>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assign Error">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>540</pd:x>
+        <pd:y>175</pd:y>
+        <config>
+            <variableName>prvarResponse</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx:ServiceResponse>
+                <pfx:ResponseHeader>
+                    <pfx:RequestDate>
+                        <xsl:value-of select="$Start/Parameters/RequestDateTime"/>
+                    </pfx:RequestDate>
+                    <pfx:ResponseDate>
+                        <xsl:value-of select="current-dateTime()"/>
+                    </pfx:ResponseDate>
+                    <pfx:ResponseCode>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/infoUsuario/DatosBasicos/Response/ErrCode"/>
+                    </pfx:ResponseCode>
+                    <pfx:ResponseDesc>
+                        <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/infoUsuario/DatosBasicos/Response/ErrDesc"/>
+                    </pfx:ResponseDesc>
+                    <pfx:TransactionID>
+                        <xsl:value-of select="$Start/Parameters/pfx:ServiceRequest/pfx:RequestHeader/pfx:System/pfx:TransactionID"/>
+                    </pfx:TransactionID>
+                </pfx:ResponseHeader>
+                <pfx:ResponseBody>
+                    <pfx:JSONMessage>
+                        <xsl:value-of select="$logicBuild-ResponseError/Return/jsonString"/>
+                    </pfx:JSONMessage>
+                </pfx:ResponseBody>
+            </pfx:ServiceResponse>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="Assign Succes">
+        <pd:type>com.tibco.pe.core.AssignActivity</pd:type>
+        <pd:resourceType>ae.activities.assignActivity</pd:resourceType>
+        <pd:x>537</pd:x>
+        <pd:y>55</pd:y>
+        <config>
+            <variableName>prvarResponse</variableName>
+        </config>
+        <pd:inputBindings>
+            <pfx:ServiceResponse>
+                <pfx:ResponseHeader>
+                    <pfx:RequestDate>
+                        <xsl:value-of select="$Start/Parameters/RequestDateTime"/>
+                    </pfx:RequestDate>
+                    <pfx:ResponseDate>
+                        <xsl:value-of select="current-dateTime()"/>
+                    </pfx:ResponseDate>
+                    <xsl:choose>
+                        <xsl:when test="exists($impJdbcCall-PA_VIN_PORT_CLI1/Return/DatosBasicosDigiturno_Rs/datosPersona)">
+                            <pfx:ResponseCode>
+                                <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/infoUsuario/DatosBasicos/Response/OkCode"/>
+                            </pfx:ResponseCode>
+                            <pfx:ResponseDesc>
+                                <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/infoUsuario/DatosBasicos/Response/OkDesc"/>
+                            </pfx:ResponseDesc>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <pfx:ResponseCode>
+                                <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/infoUsuario/DatosBasicos/Response/SinRegCode"/>
+                            </pfx:ResponseCode>
+                            <pfx:ResponseDesc>
+                                <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/infoUsuario/DatosBasicos/Response/SinRegDesc"/>
+                            </pfx:ResponseDesc>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    <pfx:TransactionID>
+                        <xsl:value-of select="$Start/Parameters/pfx:ServiceRequest/pfx:RequestHeader/pfx:System/pfx:TransactionID"/>
+                    </pfx:TransactionID>
+                </pfx:ResponseHeader>
+                <pfx:ResponseBody>
+                    <pfx:JSONMessage>
+                        <xsl:value-of select="$logicBuild-Response/Return/jsonString"/>
+                    </pfx:JSONMessage>
+                </pfx:ResponseBody>
+            </pfx:ServiceResponse>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="logicBuild ResponseError">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>178</pd:x>
+        <pd:y>183</pd:y>
+        <config>
+            <processName>/Core.Service/DatosBasicosUsuario/Implementation/logicBuildResponse.process</processName>
+        </config>
+        <pd:inputBindings>
+            <Parameters>
+                <xsl:copy-of select="$Start/Parameters/Logging"/>
+                <DatosBasicosDigiturno_Rs/>
+            </Parameters>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:activity name="InsertLog">
+        <pd:type>com.tibco.pe.core.CallProcessActivity</pd:type>
+        <pd:resourceType>ae.process.subprocess</pd:resourceType>
+        <pd:x>432</pd:x>
+        <pd:y>175</pd:y>
+        <config>
+            <processName>/Logging/Services/InsertLog.process</processName>
+        </config>
+        <pd:inputBindings>
+            <ns:Logs>
+                <xsl:if test="$Start/Parameters/Logging/TrxID">
+                    <ns:TrxID>
+                        <xsl:value-of select="$Start/Parameters/Logging/TrxID"/>
+                    </ns:TrxID>
+                </xsl:if>
+                <xsl:if test="$Start/Parameters/Logging/ESBTrxID">
+                    <ns:ESBTransactionIdentifier>
+                        <xsl:value-of select="$Start/Parameters/Logging/ESBTrxID"/>
+                    </ns:ESBTransactionIdentifier>
+                </xsl:if>
+                <ns:ServiceName>
+                    <xsl:value-of select="$Start/Parameters/Logging/ServiceName"/>
+                </ns:ServiceName>
+                <ns:OperationName>
+                    <xsl:value-of select="$Start/Parameters/Logging/OperationName"/>
+                </ns:OperationName>
+                <xsl:if test="$Start/Parameters/Logging/ApplicationID">
+                    <ns:AplicationID>
+                        <xsl:value-of select="$Start/Parameters/Logging/ApplicationID"/>
+                    </ns:AplicationID>
+                </xsl:if>
+                <ns:TimeStp>
+                    <xsl:value-of select="current-dateTime()"/>
+                </ns:TimeStp>
+                <ns:Desc>
+                    <xsl:value-of select="'ERROR Parametros invalidos'"/>
+                </ns:Desc>
+                <ns:LogLevel>
+                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/Logging/LogLevel/LogLevel"/>
+                </ns:LogLevel>
+                <xsl:if test="$Start/Parameters/Logging/OperationInvokerName">
+                    <ns:OperationInvokerName>
+                        <xsl:value-of select="$Start/Parameters/Logging/OperationInvokerName"/>
+                    </ns:OperationInvokerName>
+                </xsl:if>
+                <ns:ErrorID>
+                    <xsl:value-of select="$_globalVariables/ns1:GlobalVariables/Logging/Application/ErrorID"/>
+                </ns:ErrorID>
+                <xsl:choose>
+                    <xsl:when test="string-length($MapRequest/root/DatosBasicosDigiturno_Rq/Identificacion/TipoIdentificacion)>0 and string-length($MapRequest/root/DatosBasicosDigiturno_Rq/Identificacion/NumeroIdentificacion)=0">
+                        <ns:ErrorDesc>
+                            <xsl:value-of select="concat('Nombre de parametros invalidos [', $_globalVariables/ns1:GlobalVariables/infoUsuario/DatosBasicos/Request/NumId, ',]')"/>
+                        </ns:ErrorDesc>
+                    </xsl:when>
+                    <xsl:when test="string-length($MapRequest/root/DatosBasicosDigiturno_Rq/Identificacion/TipoIdentificacion)=0 and string-length($MapRequest/root/DatosBasicosDigiturno_Rq/Identificacion/NumeroIdentificacion)>0">
+                        <ns:ErrorDesc>
+                            <xsl:value-of select="concat('Nombre de parametros invalidos [', $_globalVariables/ns1:GlobalVariables/infoUsuario/DatosBasicos/Request/TipoId, ',]')"/>
+                        </ns:ErrorDesc>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <ns:ErrorDesc>
+                            <xsl:value-of select="concat('Nombre de parametros invalidos [', $_globalVariables/ns1:GlobalVariables/infoUsuario/DatosBasicos/Request/TipoId, ' - ', $_globalVariables/ns1:GlobalVariables/infoUsuario/DatosBasicos/Request/NumId, ',]')"/>
+                        </ns:ErrorDesc>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </ns:Logs>
+        </pd:inputBindings>
+    </pd:activity>
+    <pd:transition>
+        <pd:from>impJdbcCall PA_VIN_PORT_CLI1</pd:from>
+        <pd:to>logicBuild Response</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Start</pd:from>
+        <pd:to>MapRequest</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>logicBuild Response</pd:from>
+        <pd:to>Assign Succes</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapRequest</pd:from>
+        <pd:to>impJdbcCall PA_VIN_PORT_CLI1</pd:to>
+        <pd:xpathDescription>succes</pd:xpathDescription>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>xpath</pd:conditionType>
+        <pd:xpath>string-length($MapRequest/root/DatosBasicosDigiturno_Rq/Identificacion/TipoIdentificacion)&gt;0 and string-length($MapRequest/root/DatosBasicosDigiturno_Rq/Identificacion/NumeroIdentificacion)&gt;0</pd:xpath>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>MapRequest</pd:from>
+        <pd:to>logicBuild ResponseError</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-3381760</pd:lineColor>
+        <pd:conditionType>otherwise</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign Error</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-3381760</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>Assign Succes</pd:from>
+        <pd:to>End</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-16777216</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>logicBuild ResponseError</pd:from>
+        <pd:to>InsertLog</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-3381760</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+    <pd:transition>
+        <pd:from>InsertLog</pd:from>
+        <pd:to>Assign Error</pd:to>
+        <pd:lineType>One Bend</pd:lineType>
+        <pd:lineColor>-3381760</pd:lineColor>
+        <pd:conditionType>always</pd:conditionType>
+    </pd:transition>
+</pd:ProcessDefinition>
